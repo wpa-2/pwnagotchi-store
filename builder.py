@@ -9,33 +9,42 @@ import os
 INPUT_FILE = "repos.txt"
 OUTPUT_FILE = "plugins.json"
 
-# --- CATEGORY LOGIC ---
+# --- CATEGORY LOGIC (FIXED) ---
 def detect_category(code, name):
-    """Scans code AND filename for keywords to guess the category."""
+    """Scans code AND filename with stricter rules."""
     text = (code + " " + name).lower()
+    name = name.lower()
     
-    # 1. CHECK GPS (High Priority)
-    if any(x in text for x in ['gps', 'location', 'coordinates', 'fix', 'lat', 'lon', 'nmea', 'geo']):
-        return "GPS"
-    
-    # 2. CHECK ATTACK / WIFI
-    if any(x in text for x in ['handshake', 'deauth', 'assoc', 'crack', 'pwn', 'attack', 'sniffer', 'wpa', 'pmkid', 'pcap', 'wardriving']):
-        return "Attack"
-
-    # 3. CHECK HARDWARE / BLUETOOTH
-    if any(x in text for x in ['led', 'gpio', 'light', 'button', 'ups', 'battery', 'i2c', 'spi', 'bluetooth', 'bt-', 'ble']):
+    # 1. HARDWARE (Bluetooth, UPS, Screens)
+    # Priority: Check filename first
+    if any(x in name for x in ['ups', 'battery', 'screen', 'display', 'ink', 'oled', 'bt', 'ble']):
+        return "Hardware"
+    if any(x in text for x in ['bluetooth', 'ble', 'gpio', 'i2c', 'spi', 'papirus', 'waveshare', 'inky']):
         return "Hardware"
 
-    # 4. CHECK SOCIAL / NOTIFICATIONS
-    if any(x in text for x in ['discord', 'telegram', 'twitter', 'social', 'webhook', 'slack', 'ntfy', 'push', 'message']):
+    # 2. SOCIAL (Discord, Telegram, etc)
+    if any(x in text for x in ['discord', 'telegram', 'twitter', 'mastodon', 'webhook', 'slack', 'pushover', 'ntfy']):
         return "Social"
 
-    # 5. CHECK DISPLAY / UI
-    if any(x in text for x in ['ui.set', 'display', 'font', 'screen', 'canvas', 'faces', 'render', 'draw', 'view', 'image', 'text']):
+    # 3. GPS (Stricter keywords)
+    # Removed 'lat', 'lon', 'fix' because they match too many common words
+    if any(x in name for x in ['gps', 'geo', 'loc']):
+        return "GPS"
+    if any(x in text for x in ['gpsd', 'nmea', 'coordinates', 'latitude', 'longitude', 'geofence']):
+        return "GPS"
+
+    # 4. ATTACK / WIFI
+    if any(x in text for x in ['handshake', 'deauth', 'assoc', 'crack', 'brute', 'pmkid', 'pcap', 'wardriving', 'eapol']):
+        return "Attack"
+
+    # 5. DISPLAY / UI (Fonts, Layouts)
+    if any(x in text for x in ['ui.set', 'ui.add', 'canvas', 'font', 'faces', 'render', 'layout']):
         return "Display"
         
-    # 6. CHECK SYSTEM / UTILS
-    if any(x in text for x in ['log', 'backup', 'ssh', 'ftp', 'system', 'update', 'cpu', 'mem', 'temp', 'disk', 'reboot', 'shutdown', 'internet', 'connection']):
+    # 6. SYSTEM / UTILS
+    if any(x in name for x in ['backup', 'log', 'ssh', 'update', 'clean']):
+        return "System"
+    if any(x in text for x in ['cpu_load', 'mem_usage', 'temperature', 'shutdown', 'reboot', 'internet', 'hotspot']):
         return "System"
     
     return "General"
@@ -43,11 +52,9 @@ def detect_category(code, name):
 # --- METADATA EXTRACTION ---
 def parse_python_content(code, filename, origin_url, internal_path=None):
     try:
-        # 1. Find Version and Author
         version = re.search(r"__version__\s*=\s*['\"]([^'\"]+)['\"]", code)
         author = re.search(r"__author__\s*=\s*['\"]([^'\"]+)['\"]", code)
         
-        # 2. Find Description (Multi-line safe)
         desc_match = re.search(r"__description__\s*=\s*(?:['\"]([^'\"]+)['\"]|\(([^)]+)\))", code, re.DOTALL)
         description = "No description provided."
         if desc_match:
@@ -58,7 +65,6 @@ def parse_python_content(code, filename, origin_url, internal_path=None):
                 description = re.sub(r"['\"\n\r]", "", raw_desc)
                 description = re.sub(r"\s+", " ", description).strip()
 
-        # 3. Detect Category (Pass Name AND Code now)
         category = detect_category(code, filename)
 
         if description != "No description provided." or version:
@@ -81,10 +87,6 @@ def process_zip_url(url):
     try:
         print(f"[*] Downloading ZIP: {url}...")
         r = requests.get(url)
-        if r.status_code != 200:
-            print(f"   [!] Failed to download (Status: {r.status_code})")
-            return []
-            
         z = zipfile.ZipFile(io.BytesIO(r.content))
         
         for filename in z.namelist():
@@ -94,7 +96,7 @@ def process_zip_url(url):
                 
                 plugin = parse_python_content(code, filename.split("/")[-1], url, filename)
                 if plugin:
-                    print(f"   [+] Found: {plugin['name']} [{plugin['category']}]")
+                    print(f"   [+] {plugin['name']:<25} -> {plugin['category']}")
                     found.append(plugin)
     except Exception as e:
         print(f"   [!] ZIP Error: {e}")
@@ -102,7 +104,6 @@ def process_zip_url(url):
 
 def main():
     master_list = []
-    
     if not os.path.exists(INPUT_FILE):
         print(f"Error: {INPUT_FILE} not found.")
         return
@@ -116,18 +117,16 @@ def main():
             master_list.extend(plugins)
         else:
             try:
-                print(f"[*] Scanning file: {url}")
                 code = requests.get(url).text
                 plugin = parse_python_content(code, url.split("/")[-1], url, None)
                 if plugin:
+                    print(f"   [+] {plugin['name']:<25} -> {plugin['category']}")
                     master_list.append(plugin)
-            except Exception as e:
-                print(f"   [!] Error: {e}")
+            except Exception as e: pass
 
     with open(OUTPUT_FILE, "w") as f:
         json.dump(master_list, f, indent=2)
-    
-    print(f"\n[SUCCESS] Generated {OUTPUT_FILE} with {len(master_list)} plugins.")
+    print(f"\n[SUCCESS] Updated {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     main()
