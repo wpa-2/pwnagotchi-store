@@ -4,63 +4,76 @@ import re
 import io
 import zipfile
 import os
+from collections import defaultdict
 
 # --- CONFIGURATION ---
 INPUT_FILE = "repos.txt"
 OUTPUT_FILE = "plugins.json"
 
-# --- CATEGORY LOGIC (v4 - Final Priority) ---
-def detect_category(code, name):
-    """Scans code AND filename. Name matches take priority."""
-    text = (code + " " + name).lower()
-    name = name.lower()
+# --- SMART CATEGORY DICTIONARY ---
+# Keywords mapped to their category
+KEYWORDS = {
+    "GPS": ["gps", "geo", "lat", "lon", "location", "map", "coordinates", "nmea", "track"],
+    "Social": ["discord", "telegram", "twitter", "social", "chat", "bot", "webhook", "slack", "message", "notify"],
+    "Display": ["screen", "display", "ui", "theme", "face", "font", "oled", "ink", "led", "view", "clock", "weather", "status", "mem", "cpu", "info"],
+    "Attack": ["pwn", "crack", "handshake", "deauth", "assoc", "brute", "attack", "wardriving", "pmkid", "wpa", "eapol", "sniff"],
+    "Hardware": ["ups", "battery", "power", "shutdown", "reboot", "button", "switch", "gpio", "i2c", "spi", "bluetooth", "ble", "hw"],
+    "System": ["backup", "ssh", "log", "update", "fix", "clean", "config", "manage", "util", "internet", "wifi", "connection"]
+}
+
+def detect_category(name, description, code):
+    """Calculates a score for each category based on keywords."""
+    scores = defaultdict(int)
     
-    # --- PRIORITY 1: FILENAME CHECKS (These override everything) ---
-    if any(x in name for x in ['gps', 'geo', 'loc', 'map']): return "GPS"
-    if any(x in name for x in ['ups', 'batt', 'screen', 'display', 'ink', 'oled', 'led', 'light']): return "Hardware"
-    if any(x in name for x in ['discord', 'telegram', 'bot', 'chat', 'social']): return "Social"
-    if any(x in name for x in ['handshake', 'pwn', 'crack', 'attack', 'deauth']): return "Attack"
-    if any(x in name for x in ['backup', 'log', 'ssh', 'clean', 'sys']): return "System"
+    # Prepare text blobs
+    name_lower = name.lower()
+    desc_lower = description.lower() if description else ""
+    code_lower = code.lower()
 
-    # --- PRIORITY 2: DEEP CODE SCAN (If filename was vague) ---
+    # --- SCORING LOOP ---
+    for category, tags in KEYWORDS.items():
+        for tag in tags:
+            # 1. Filename Match (Highest Priority: 10 points)
+            if tag in name_lower:
+                scores[category] += 10
+            
+            # 2. Description Match (Medium Priority: 3 points)
+            # We look for the tag as a whole word to avoid false positives (e.g. "lat" in "platform")
+            if re.search(r'\b' + re.escape(tag) + r'\b', desc_lower):
+                scores[category] += 3
+            
+            # 3. Code Match (Low Priority: 1 point)
+            # Only checks first 2000 characters of code to avoid false positives deep in logic
+            if tag in code_lower[:2000]: 
+                scores[category] += 1
+
+    # Specific Fixes/Penalties
+    # If it has "ui.set", it's almost certainly Display, give it a boost
+    if "ui.set" in code_lower: scores["Display"] += 5
     
-    # Social (Check content)
-    if any(x in text for x in ['discord', 'telegram', 'twitter', 'mastodon', 'webhook', 'slack', 'pushover', 'ntfy']):
-        return "Social"
+    # If it mentions "gpio" explicitly, boost Hardware
+    if "gpio" in code_lower: scores["Hardware"] += 2
 
-    # GPS (Check content)
-    if any(x in text for x in ['gpsd', 'nmea', 'coordinates', 'latitude', 'longitude', 'geofence']):
-        return "GPS"
-
-    # Attack / WiFi
-    if any(x in text for x in ['handshake', 'deauth', 'assoc', 'crack', 'brute', 'pmkid', 'pcap', 'wardriving', 'eapol']):
-        return "Attack"
-
-    # Hardware
-    if any(x in text for x in ['gpio', 'i2c', 'spi', 'papirus', 'waveshare', 'inky', 'bluetooth', 'pisugar']):
-        return "Hardware"
-
-    # System
-    if any(x in text for x in ['cpu_load', 'mem_usage', 'temperature', 'shutdown', 'reboot', 'internet', 'hotspot', 'wlan0']):
-        return "System"
-
-    # Display
-    if any(x in text for x in ['ui.set', 'ui.add', 'canvas', 'font', 'faces', 'render', 'layout', 'view']):
-        return "Display"
+    # Find the winner
+    if not scores:
+        return "System" # Default if nothing matches
+        
+    best_category = max(scores, key=scores.get)
     
-    return "General"
+    # Debug line (Optional: Uncomment to see how it decided)
+    # print(f"{name}: {dict(scores)} -> {best_category}")
+    
+    return best_category
 
 # --- METADATA EXTRACTION ---
 def parse_python_content(code, filename, origin_url, internal_path=None):
     try:
-        # 1. Find Version and Author (Improved Regex)
         version_match = re.search(r"__version__\s*=\s*[\"'](.+?)[\"']", code)
         author_match = re.search(r"__author__\s*=\s*[\"'](.+?)[\"']", code)
         
         version = version_match.group(1) if version_match else "0.0.1"
         author = author_match.group(1) if author_match else "Unknown"
         
-        # 2. Find Description (Multi-line safe)
         desc_match = re.search(r"__description__\s*=\s*(?:['\"]([^'\"]+)['\"]|\(([^)]+)\))", code, re.DOTALL)
         description = "No description provided."
         if desc_match:
@@ -71,7 +84,8 @@ def parse_python_content(code, filename, origin_url, internal_path=None):
                 description = re.sub(r"['\"\n\r]", "", raw_desc)
                 description = re.sub(r"\s+", " ", description).strip()
 
-        category = detect_category(code, filename)
+        # PASS ALL DATA TO THE SMART DETECTOR
+        category = detect_category(filename.replace(".py", ""), description, code)
 
         if description != "No description provided." or version != "0.0.1":
             return {
