@@ -16,7 +16,7 @@ import shutil
 import re
 
 # --- CONFIGURATION ---
-# [IMPORTANT] CHANGE THIS TO YOUR GITHUB RAW URL BEFORE PUSHING
+# [IMPORTANT] CHANGE THIS TO YOUR GITHUB RAW URL
 REGISTRY_URL = "http://192.168.1.4:3001/wpa2/pwnagotchi-store/raw/branch/main/plugins.json"
 
 CUSTOM_PLUGIN_DIR = "/usr/local/share/pwnagotchi/custom-plugins/"
@@ -36,7 +36,7 @@ def banner():
     print(r" | |_) \ \ /\ / / '_ \ (___| |_ ___  _ __ ___  ")
     print(r" |  __/ \ V  V /| | | \___ \ __/ _ \| '__/ _ \ ")
     print(r" | |     \_/\_/ |_| |_|____/ || (_) | | |  __/ ")
-    print(r" |_|   v1.5 (Auto-Update)\_____/\__\___/|_|  \___| ")
+    print(r" |_|   v1.6 (Upgrade)   \_____/\__\___/|_|  \___| ")
     print(f"{RESET}")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
@@ -48,6 +48,19 @@ def check_sudo():
 def is_safe_name(name):
     """Security: Prevents Path Traversal (e.g. ../../etc/passwd)"""
     return re.match(r'^[a-zA-Z0-9_-]+$', name) is not None
+
+def get_local_version(file_path):
+    """Reads the __version__ string from a local file."""
+    try:
+        with open(file_path, 'r', errors='ignore') as f:
+            content = f.read()
+            # Look for __version__ = '1.0.0' or "1.0.0"
+            match = re.search(r"__version__\s*=\s*[\"'](.+?)[\"']", content)
+            if match:
+                return match.group(1)
+    except:
+        pass
+    return "0.0.0"
 
 def get_installed_plugins():
     if not os.path.exists(CUSTOM_PLUGIN_DIR):
@@ -122,19 +135,17 @@ def scan_for_config_params(file_path):
 def update_self(args):
     """Downloads the latest pwnstore.py from the repo and overwrites itself."""
     check_sudo()
-    print(f"[*] Checking for updates...")
+    print(f"[*] Checking for tool updates...")
     
-    # Construct the URL for the script (assumes it's in the same folder as plugins.json)
     script_url = REGISTRY_URL.replace("plugins.json", "pwnstore.py")
     
     try:
-        print(f"[*] Downloading latest version from GitHub...")
+        print(f"[*] Downloading latest version...")
         r = requests.get(script_url, timeout=15)
         if r.status_code != 200:
             print(f"{RED}[!] Update failed: Server returned {r.status_code}{RESET}")
             return
             
-        # Basic sanity check to ensure we downloaded a script
         if "#!/usr/bin/env python3" not in r.text:
             print(f"{RED}[!] Security Error: Downloaded file does not look like a valid script.{RESET}")
             return
@@ -144,10 +155,67 @@ def update_self(args):
             f.write(r.text)
         
         os.chmod(current_file, 0o755)
-        print(f"{GREEN}[+] PwnStore updated successfully! Run 'pwnstore list' to see the new version.{RESET}")
+        print(f"{GREEN}[+] PwnStore updated successfully! Run 'pwnstore list' to verify version.{RESET}")
 
     except Exception as e:
         print(f"{RED}[!] Update failed: {e}{RESET}")
+
+def upgrade_plugins(args):
+    """Checks installed plugins against registry and updates them."""
+    check_sudo()
+    print(f"[*] Checking for plugin updates...")
+    
+    registry = fetch_registry()
+    installed_files = [f for f in os.listdir(CUSTOM_PLUGIN_DIR) if f.endswith(".py")]
+    
+    updates_found = []
+
+    for filename in installed_files:
+        plugin_name = filename.replace(".py", "")
+        
+        # Find this plugin in the registry
+        remote_data = next((p for p in registry if p['name'] == plugin_name), None)
+        
+        if remote_data:
+            local_ver = get_local_version(os.path.join(CUSTOM_PLUGIN_DIR, filename))
+            remote_ver = remote_data['version']
+            
+            # Basic version check (String comparison works for 1.0.0 vs 1.0.1)
+            if remote_ver != local_ver:
+                updates_found.append({
+                    "name": plugin_name,
+                    "local": local_ver,
+                    "remote": remote_ver,
+                    "author": remote_data['author']
+                })
+
+    if not updates_found:
+        print(f"{GREEN}[+] All plugins are up to date.{RESET}")
+        return
+
+    print(f"\n{YELLOW}Updates available:{RESET}")
+    for u in updates_found:
+        print(f"  • {CYAN}{u['name']}{RESET}: v{u['local']} -> v{u['remote']}")
+
+    print(f"\n{YELLOW}Do you want to upgrade these {len(updates_found)} plugins? (Y/n){RESET}")
+    try:
+        choice = input().lower()
+    except KeyboardInterrupt:
+        print("\n[*] Cancelled.")
+        return
+    
+    if choice == 'y' or choice == '':
+        for u in updates_found:
+            # Reuse install logic by mocking an args object
+            class MockArgs:
+                name = u['name']
+            
+            print(f"\n[*] Upgrading {u['name']}...")
+            install_plugin(MockArgs())
+        
+        print(f"\n{GREEN}[+] Upgrade complete! Please restart Pwnagotchi.{RESET}")
+    else:
+        print("[*] Upgrade cancelled.")
 
 def install_plugin(args):
     check_sudo()
@@ -277,8 +345,12 @@ def main():
     parser_uninstall.add_argument('name', type=str, help='Name of the plugin')
     parser_uninstall.set_defaults(func=uninstall_plugin)
 
-    parser_update = subparsers.add_parser('update', help='Update PwnStore to the latest version')
+    parser_update = subparsers.add_parser('update', help='Update PwnStore tool to latest version')
     parser_update.set_defaults(func=update_self)
+
+    # NEW UPGRADE COMMAND
+    parser_upgrade = subparsers.add_parser('upgrade', help='Check for and install plugin updates')
+    parser_upgrade.set_defaults(func=upgrade_plugins)
 
     args = parser.parse_args()
     if hasattr(args, 'func'):
