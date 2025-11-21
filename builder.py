@@ -9,43 +9,43 @@ import os
 INPUT_FILE = "repos.txt"
 OUTPUT_FILE = "plugins.json"
 
-# --- CATEGORY LOGIC (FIXED) ---
+# --- CATEGORY LOGIC (v3 - Smart Priority) ---
 def detect_category(code, name):
-    """Scans code AND filename with stricter rules."""
+    """Scans code AND filename with stricter rules and better priority."""
     text = (code + " " + name).lower()
     name = name.lower()
     
-    # 1. HARDWARE (Bluetooth, UPS, Screens)
-    # Priority: Check filename first
-    if any(x in name for x in ['ups', 'battery', 'screen', 'display', 'ink', 'oled', 'bt', 'ble']):
-        return "Hardware"
-    if any(x in text for x in ['bluetooth', 'ble', 'gpio', 'i2c', 'spi', 'papirus', 'waveshare', 'inky']):
-        return "Hardware"
-
-    # 2. SOCIAL (Discord, Telegram, etc)
+    # 1. SOCIAL (Check this FIRST so Discord isn't flagged as Hardware)
     if any(x in text for x in ['discord', 'telegram', 'twitter', 'mastodon', 'webhook', 'slack', 'pushover', 'ntfy']):
         return "Social"
 
-    # 3. GPS (Stricter keywords)
-    # Removed 'lat', 'lon', 'fix' because they match too many common words
-    if any(x in name for x in ['gps', 'geo', 'loc']):
+    # 2. GPS 
+    if any(x in name for x in ['gps', 'geo', 'loc', 'map']):
         return "GPS"
     if any(x in text for x in ['gpsd', 'nmea', 'coordinates', 'latitude', 'longitude', 'geofence']):
         return "GPS"
 
-    # 4. ATTACK / WIFI
+    # 3. ATTACK / WIFI
     if any(x in text for x in ['handshake', 'deauth', 'assoc', 'crack', 'brute', 'pmkid', 'pcap', 'wardriving', 'eapol']):
         return "Attack"
 
-    # 5. DISPLAY / UI (Fonts, Layouts)
-    if any(x in text for x in ['ui.set', 'ui.add', 'canvas', 'font', 'faces', 'render', 'layout']):
+    # 4. HARDWARE (Stricter - Removed 'button' and 'display' from text scan to avoid false positives)
+    # Only check filename for generic terms
+    if any(x in name for x in ['ups', 'battery', 'screen', 'display', 'ink', 'oled', 'bt', 'ble', 'led', 'light']):
+        return "Hardware"
+    # Check code for specific hardware libraries
+    if any(x in text for x in ['gpio', 'i2c', 'spi', 'papirus', 'waveshare', 'inky', 'bluetooth', 'pisugar']):
+        return "Hardware"
+
+    # 5. SYSTEM / UTILS
+    if any(x in name for x in ['backup', 'log', 'ssh', 'update', 'clean', 'clock', 'uptime']):
+        return "System"
+    if any(x in text for x in ['cpu_load', 'mem_usage', 'temperature', 'shutdown', 'reboot', 'internet', 'hotspot', 'wlan0']):
+        return "System"
+
+    # 6. DISPLAY / UI (Catch-all for visual stuff)
+    if any(x in text for x in ['ui.set', 'ui.add', 'canvas', 'font', 'faces', 'render', 'layout', 'view']):
         return "Display"
-        
-    # 6. SYSTEM / UTILS
-    if any(x in name for x in ['backup', 'log', 'ssh', 'update', 'clean']):
-        return "System"
-    if any(x in text for x in ['cpu_load', 'mem_usage', 'temperature', 'shutdown', 'reboot', 'internet', 'hotspot']):
-        return "System"
     
     return "General"
 
