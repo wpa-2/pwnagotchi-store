@@ -67,7 +67,7 @@
         }
         .social-link:hover { color: #000; background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
 
-        /* Category Filters */
+        /* Filters */
         .filters { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
         .filter-btn {
             background: #1a1a1a; border: 1px solid #333; color: #888; padding: 8px 16px;
@@ -100,9 +100,12 @@
         .card h2 { 
             margin: 0; font-size: 1.4rem; color: var(--accent); font-family: var(--font-pixel);
             font-weight: 400; letter-spacing: 1px; white-space: nowrap; overflow: hidden; 
-            text-overflow: ellipsis; max-width: 65%;
+            text-overflow: ellipsis; padding-right: 50px; /* Space for Repo Button */
         }
+        
+        /* ABSOLUTE POSITION REPO BUTTON */
         .repo-link {
+            position: absolute; top: 25px; right: 25px;
             font-family: var(--font-pixel); font-size: 1rem; color: #555; border: 1px solid #333;
             padding: 2px 6px; border-radius: 4px; transition: color 0.2s;
         }
@@ -119,6 +122,8 @@
             font-size: 0.9rem; color: #bbb; line-height: 1.5; overflow: hidden; height: 4.5em; 
             display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
         }
+        /* Capitalize first letter */
+        .desc::first-letter { text-transform: uppercase; }
 
         /* Install Overlay */
         .install-overlay {

@@ -15,7 +15,7 @@ def detect_category(code, name):
     text = (code + " " + name).lower()
     name = name.lower()
     
-    # 1. SOCIAL (Check this FIRST so Discord isn't flagged as Hardware)
+    # 1. SOCIAL
     if any(x in text for x in ['discord', 'telegram', 'twitter', 'mastodon', 'webhook', 'slack', 'pushover', 'ntfy']):
         return "Social"
 
@@ -29,11 +29,9 @@ def detect_category(code, name):
     if any(x in text for x in ['handshake', 'deauth', 'assoc', 'crack', 'brute', 'pmkid', 'pcap', 'wardriving', 'eapol']):
         return "Attack"
 
-    # 4. HARDWARE (Stricter - Removed 'button' and 'display' from text scan to avoid false positives)
-    # Only check filename for generic terms
+    # 4. HARDWARE
     if any(x in name for x in ['ups', 'battery', 'screen', 'display', 'ink', 'oled', 'bt', 'ble', 'led', 'light']):
         return "Hardware"
-    # Check code for specific hardware libraries
     if any(x in text for x in ['gpio', 'i2c', 'spi', 'papirus', 'waveshare', 'inky', 'bluetooth', 'pisugar']):
         return "Hardware"
 
@@ -43,7 +41,7 @@ def detect_category(code, name):
     if any(x in text for x in ['cpu_load', 'mem_usage', 'temperature', 'shutdown', 'reboot', 'internet', 'hotspot', 'wlan0']):
         return "System"
 
-    # 6. DISPLAY / UI (Catch-all for visual stuff)
+    # 6. DISPLAY / UI
     if any(x in text for x in ['ui.set', 'ui.add', 'canvas', 'font', 'faces', 'render', 'layout', 'view']):
         return "Display"
     
@@ -52,9 +50,14 @@ def detect_category(code, name):
 # --- METADATA EXTRACTION ---
 def parse_python_content(code, filename, origin_url, internal_path=None):
     try:
-        version = re.search(r"__version__\s*=\s*['\"]([^'\"]+)['\"]", code)
-        author = re.search(r"__author__\s*=\s*['\"]([^'\"]+)['\"]", code)
+        # 1. Find Version and Author (Improved Regex to handle ' vs " and spacing)
+        version_match = re.search(r"__version__\s*=\s*[\"'](.+?)[\"']", code)
+        author_match = re.search(r"__author__\s*=\s*[\"'](.+?)[\"']", code)
         
+        version = version_match.group(1) if version_match else "0.0.1"
+        author = author_match.group(1) if author_match else "Unknown"
+        
+        # 2. Find Description (Multi-line safe)
         desc_match = re.search(r"__description__\s*=\s*(?:['\"]([^'\"]+)['\"]|\(([^)]+)\))", code, re.DOTALL)
         description = "No description provided."
         if desc_match:
@@ -67,12 +70,12 @@ def parse_python_content(code, filename, origin_url, internal_path=None):
 
         category = detect_category(code, filename)
 
-        if description != "No description provided." or version:
+        if description != "No description provided." or version != "0.0.1":
             return {
                 "name": filename.replace(".py", ""),
-                "version": version.group(1) if version else "0.0.1",
+                "version": version,
                 "description": description,
-                "author": author.group(1) if author else "Unknown",
+                "author": author,
                 "category": category,
                 "origin_type": "zip" if internal_path else "single",
                 "download_url": origin_url,
