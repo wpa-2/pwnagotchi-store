@@ -16,7 +16,7 @@
             --text-muted: #888;
             --accent: #4caf50;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-pixel: 'VT323', monospace; /* The Pwnagotchi Font */
+            --font-pixel: 'VT323', monospace;
         }
 
         * { box-sizing: border-box; }
@@ -34,7 +34,6 @@
         /* Header */
         header { text-align: center; margin-bottom: 40px; }
 
-        /* The Face Style */
         .pwn-face {
             font-family: 'Arial', sans-serif;
             font-size: 3.5rem;
@@ -60,137 +59,83 @@
         }
         .credits a:hover { color: var(--accent); }
 
-        /* SOCIAL NAV BAR */
-        .social-nav {
-            margin-top: 25px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
+        /* Social Nav */
+        .social-nav { margin-top: 25px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .social-link {
-            font-family: var(--font-pixel);
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            border: 1px solid #333;
-            padding: 5px 12px;
-            border-radius: 4px;
-            transition: all 0.2s;
-            background: #1a1a1a;
+            font-family: var(--font-pixel); font-size: 1.3rem; color: var(--text-muted);
+            border: 1px solid #333; padding: 5px 12px; border-radius: 4px; transition: all 0.2s; background: #1a1a1a;
         }
+        .social-link:hover { color: #000; background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
 
-        .social-link:hover {
-            color: #000;
-            background: var(--accent);
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+        /* Category Filters */
+        .filters { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .filter-btn {
+            background: #1a1a1a; border: 1px solid #333; color: #888; padding: 8px 16px;
+            border-radius: 20px; font-family: var(--font-main); font-size: 0.85rem; cursor: pointer;
+            transition: all 0.2s; text-transform: uppercase; font-weight: 600;
         }
+        .filter-btn:hover, .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
 
         /* Search */
         .search-container { max-width: 600px; margin: 0 auto 40px auto; }
         input#search {
             width: 100%; padding: 16px 25px; background: #1a1a1a;
             border: 1px solid #333; border-radius: 50px; color: #fff;
-            font-size: 1.2rem; font-family: var(--font-pixel);
-            outline: none; transition: all 0.3s ease;
+            font-size: 1.2rem; font-family: var(--font-pixel); outline: none; transition: all 0.3s ease;
         }
         input#search:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(76, 175, 80, 0.1); }
-        input#search::placeholder { color: #555; }
 
         /* Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
 
         /* Cards */
         .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 25px;
-            position: relative;
-            border: 1px solid #2a2a2a;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            height: 220px; 
-            overflow: hidden;
+            background: var(--card-bg); border-radius: 16px; padding: 25px; position: relative;
+            border: 1px solid #2a2a2a; transition: all 0.3s ease; display: flex; flex-direction: column;
+            height: 220px; overflow: hidden;
         }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .card h2 { 
-            margin: 0; font-size: 1.4rem; color: var(--accent); 
-            font-family: var(--font-pixel); font-weight: 400;
-            letter-spacing: 1px; white-space: nowrap; overflow: hidden; 
+            margin: 0; font-size: 1.4rem; color: var(--accent); font-family: var(--font-pixel);
+            font-weight: 400; letter-spacing: 1px; white-space: nowrap; overflow: hidden; 
             text-overflow: ellipsis; max-width: 65%;
         }
-
-        /* Repo Link Style */
         .repo-link {
-            font-family: var(--font-pixel);
-            font-size: 1rem;
-            color: #555;
-            border: 1px solid #333;
-            padding: 2px 6px;
-            border-radius: 4px;
-            transition: color 0.2s, border-color 0.2s;
+            font-family: var(--font-pixel); font-size: 1rem; color: #555; border: 1px solid #333;
+            padding: 2px 6px; border-radius: 4px; transition: color 0.2s;
         }
         .repo-link:hover { color: #fff; border-color: #fff; }
 
         .meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-
-        .version-badge {
-            background: #2a2a2a; font-size: 0.8rem; padding: 2px 8px; 
-            border-radius: 4px; color: #777; font-family: var(--font-pixel);
-        }
-
-        .author { 
-            font-size: 0.8rem; color: #555; 
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%;
-        }
+        .author { font-size: 0.8rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; }
         
+        .badges { display: flex; gap: 5px; }
+        .badge { background: #2a2a2a; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; color: #777; font-family: var(--font-pixel); }
+        .badge.cat { color: var(--accent); border: 1px solid #333; }
+
         .desc { 
-            font-size: 0.9rem; color: #bbb; line-height: 1.5; 
-            overflow: hidden; height: 4.5em; 
+            font-size: 0.9rem; color: #bbb; line-height: 1.5; overflow: hidden; height: 4.5em; 
             display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
         }
 
-        /* Hover Button */
+        /* Install Overlay */
         .install-overlay {
             position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
             background: linear-gradient(to top, var(--card-bg) 40%, transparent);
             transform: translateY(100%); transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; justify-content: center; align-items: flex-end; height: 100px; 
         }
-
         .card:hover .install-overlay { transform: translateY(0); }
-
         button.install-btn {
-            width: auto; min-width: 120px; padding: 8px 24px;
-            background: var(--accent); color: #000; border: none;
-            border-radius: 50px; font-family: var(--font-pixel); font-size: 1.2rem;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-            text-transform: uppercase;
+            width: auto; min-width: 120px; padding: 8px 24px; background: var(--accent); color: #000;
+            border: none; border-radius: 50px; font-family: var(--font-pixel); font-size: 1.2rem;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); text-transform: uppercase;
         }
         button.install-btn:hover { background: #fff; }
 
+        /* Mobile */
         @media (hover: none) {
             .install-overlay { transform: translateY(0); background: none; position: relative; padding: 20px 0 0 0; height: auto; }
             .card { height: auto; }
@@ -199,21 +144,9 @@
         }
 
         /* Modal */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
-            z-index: 1000; justify-content: center; align-items: center;
-        }
-        .modal {
-            background: #1a1a1a; padding: 35px; border-radius: 20px;
-            width: 90%; max-width: 480px; text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid #333;
-        }
-        .cmd-box {
-            background: #000; color: var(--accent); font-family: var(--font-mono);
-            padding: 15px; border-radius: 8px; margin: 20px 0;
-            word-break: break-all; border: 1px dashed #333; font-size: 0.9rem;
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal { background: #1a1a1a; padding: 35px; border-radius: 20px; width: 90%; max-width: 480px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid #333; }
+        .cmd-box { background: #000; color: var(--accent); font-family: var(--font-mono); padding: 15px; border-radius: 8px; margin: 20px 0; word-break: break-all; border: 1px dashed #333; font-size: 0.9rem; }
         .modal-actions { display: flex; gap: 10px; }
         .btn-copy { flex: 2; background: var(--text-main); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         .btn-close { flex: 1; background: transparent; color: #666; border: 1px solid #333; padding: 12px; border-radius: 8px; cursor: pointer; }
@@ -238,12 +171,21 @@
         </nav>
     </header>
 
+    <div class="filters">
+        <button class="filter-btn active" onclick="setCategory('All')">All</button>
+        <button class="filter-btn" onclick="setCategory('Display')">Display</button>
+        <button class="filter-btn" onclick="setCategory('GPS')">GPS</button>
+        <button class="filter-btn" onclick="setCategory('Social')">Social</button>
+        <button class="filter-btn" onclick="setCategory('Hardware')">Hardware</button>
+        <button class="filter-btn" onclick="setCategory('Attack')">Attack</button>
+        <button class="filter-btn" onclick="setCategory('System')">System</button>
+    </div>
+
     <div class="search-container">
         <input type="text" id="search" placeholder="> Search plugins..." onkeyup="filterPlugins()">
     </div>
 
-    <div class="grid" id="plugin-grid">
-        </div>
+    <div class="grid" id="plugin-grid"></div>
 
     <div class="modal-overlay" id="modal">
         <div class="modal">
@@ -259,28 +201,21 @@
 
     <script>
         let plugins = [];
+        let currentCategory = 'All';
+
         fetch('plugins.json').then(r => r.json()).then(d => { plugins = d; renderPlugins(plugins); });
 
         function renderPlugins(list) {
             const grid = document.getElementById('plugin-grid');
             grid.innerHTML = "";
             list.forEach(p => {
-                // 1. Clean Author
                 let cleanAuthor = p.author.replace(/<[^>]*>/g, "").trim().replace(/[\w\.-]+@[\w\.-]+/g, "").trim().replace(/^[0-9]+\+/, "").trim();
                 if(cleanAuthor.length > 20) cleanAuthor = cleanAuthor.substring(0, 18) + "...";
                 if(cleanAuthor.length === 0) cleanAuthor = "Unknown";
 
-                // 2. Calculate Repo URL (Smart Guessing)
                 let repoUrl = p.download_url;
-                if(repoUrl.includes('/archive/')) {
-                    // Zip link -> Repo root
-                    repoUrl = repoUrl.split('/archive/')[0];
-                } else if(repoUrl.includes('raw.githubusercontent.com')) {
-                    // Raw file -> Blob view
-                    repoUrl = repoUrl.replace('raw.githubusercontent.com', 'github.com')
-                                     .replace('/main/', '/blob/main/')
-                                     .replace('/master/', '/blob/master/');
-                }
+                if(repoUrl.includes('/archive/')) repoUrl = repoUrl.split('/archive/')[0];
+                else if(repoUrl.includes('raw.githubusercontent.com')) repoUrl = repoUrl.replace('raw.githubusercontent.com', 'github.com').replace('/main/', '/blob/main/').replace('/master/', '/blob/master/');
 
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -291,7 +226,10 @@
                     </div>
                     <div class="meta-row">
                         <div class="author">by ${cleanAuthor}</div>
-                        <span class="version-badge">v${p.version}</span>
+                        <div class="badges">
+                            <span class="badge cat">${p.category || 'General'}</span>
+                            <span class="badge">v${p.version}</span>
+                        </div>
                     </div>
                     <div class="desc">${p.description}</div>
                     <div class="install-overlay">
@@ -304,7 +242,21 @@
 
         function filterPlugins() {
             const term = document.getElementById('search').value.toLowerCase();
-            renderPlugins(plugins.filter(p => p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term)));
+            const filtered = plugins.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term);
+                const matchCat = currentCategory === 'All' || p.category === currentCategory;
+                return matchSearch && matchCat;
+            });
+            renderPlugins(filtered);
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText === cat) btn.classList.add('active');
+            });
+            filterPlugins();
         }
 
         const modal = document.getElementById('modal');
