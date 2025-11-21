@@ -16,7 +16,7 @@ import shutil
 import re
 
 # --- CONFIGURATION ---
-# UPDATE THIS WITH YOUR GITEA IP
+# UPDATE THIS WITH YOUR GITEA IP AND PORT
 REGISTRY_URL = "http://192.168.1.4:3001/wpa2/pwnagotchi-store/raw/branch/main/plugins.json"
 
 CUSTOM_PLUGIN_DIR = "/usr/local/share/pwnagotchi/custom-plugins/"
@@ -36,7 +36,7 @@ def banner():
     print(r" | |_) \ \ /\ / / '_ \ (___| |_ ___  _ __ ___  ")
     print(r" |  __/ \ V  V /| | | \___ \ __/ _ \| '__/ _ \ ")
     print(r" | |     \_/\_/ |_| |_|____/ || (_) | | |  __/ ")
-    print(r" |_|   v1.1 by WPA2     \_____/\__\___/|_|  \___| ")
+    print(r" |_|   v1.2 by WPA2     \_____/\__\___/|_|  \___| ")
     print(f"{RESET}")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
@@ -91,19 +91,25 @@ def show_info(args):
     print("")
 
 def scan_for_config_params(file_path):
-    """Scans the installed file for 'self.options['xyz']' to give user hints."""
+    """Scans for self.options['key'] OR self.options["key"] OR self.options.get('key')."""
     params = []
     try:
         with open(file_path, 'r', errors='ignore') as f:
             content = f.read()
-            # Regex to find self.options['something']
-            matches = re.findall(r"self\.options\['([^']+)'\]", content)
-            params = list(set(matches)) # Remove duplicates
+            # Regex: finds self.options followed by ['key'] or .get('key')
+            matches = re.findall(r"self\.options(?:\[|\.get\()\s*['\"]([^'\"]+)['\"]", content)
+            params = list(set(matches)) 
     except:
         pass
     return params
 
+def check_sudo():
+    if os.geteuid() != 0:
+        print(f"{RED}[!] Error: You must run this command with sudo.{RESET}")
+        sys.exit(1)
+
 def install_plugin(args):
+    check_sudo()
     target_name = args.name
     registry = fetch_registry()
     
@@ -154,6 +160,7 @@ def install_plugin(args):
         print(f"{RED}[!] Installation failed: {e}{RESET}")
 
 def uninstall_plugin(args):
+    check_sudo()
     target_name = args.name
     file_path = os.path.join(CUSTOM_PLUGIN_DIR, f"{target_name}.py")
     
