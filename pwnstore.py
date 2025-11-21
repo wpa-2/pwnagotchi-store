@@ -17,7 +17,7 @@ import re
 
 # --- CONFIGURATION ---
 # [IMPORTANT] CHANGE THIS TO YOUR GITHUB RAW URL BEFORE PUSHING
-REGISTRY_URL = "http://192.168.1.4:3001/wpa2/pwnagotchi-store/raw/branch/main/plugins.json""
+REGISTRY_URL = "http://192.168.1.4:3001/wpa2/pwnagotchi-store/raw/branch/main/plugins.json"
 
 CUSTOM_PLUGIN_DIR = "/usr/local/share/pwnagotchi/custom-plugins/"
 CONFIG_FILE = "/etc/pwnagotchi/config.toml"
