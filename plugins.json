@@ -1,73 +1,33 @@
 [
   {
-    "name": "bluetoothsniffer",
-    "version": "0.1.4",
-    "description": "A plugin that sniffs Bluetooth devices and saves their MAC addresses, name and counts to a JSON file",
-    "author": "diytechtinker, fixed by Jayofelony",
-    "category": "Hardware",
-    "origin_type": "zip",
-    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi-torch-plugins-main/bluetoothsniffer.py"
-  },
-  {
-    "name": "gpsdeasy",
-    "version": "1.3.4",
-    "description": "uses gpsd to report lat/long on the screen and setup bettercap pcap gps logging",
-    "author": "discord@rai68",
-    "category": "GPS",
-    "origin_type": "zip",
-    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi-torch-plugins-main/gpsdeasy.py"
-  },
-  {
-    "name": "handshakes-dl",
-    "version": "0.2.1",
-    "description": "Download handshake captures from web-ui.",
-    "author": "me@sayakb.com",
+    "name": "adsbsniffer",
+    "version": "0.1.0",
+    "description": "A plugin that captures ADS-B data from aircraft using RTL-SDR and logs it.",
+    "author": "4li3nMaJ1k",
     "category": "Attack",
     "origin_type": "zip",
-    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi-torch-plugins-main/handshakes-dl.py"
+    "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/adsbsniffer.py"
   },
   {
-    "name": "internet-connection",
+    "name": "age",
+    "version": "3.1.0",
+    "description": "An enhanced plugin with frequent titles, dynamic quotes, progress bars, random events, handshake streaks, personality evolution, and secret achievements. UI is optimized to avoid clutter.",
+    "author": "AlienMajik",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/age.py"
+  },
+  {
+    "name": "auto_backup",
     "version": "1.2.1",
-    "description": "A plugin that displays the Internet connection status on the pwnagotchi display.",
-    "author": "@jayofelony",
+    "description": "Backs up files when internet is available. Creates compressed, safe backups.",
+    "author": "WPA2",
     "category": "System",
     "origin_type": "zip",
-    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi-torch-plugins-main/internet-connection.py"
-  },
-  {
-    "name": "memtemp-plus",
-    "version": "1.0.3",
-    "description": "A plugin that will display memory/cpu usage and temperature",
-    "author": "https://github.com/xenDE",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi-torch-plugins-main/memtemp-plus.py"
-  },
-  {
-    "name": "pwndroid",
-    "version": "1.1.003",
-    "description": "Plugin for the companion app PwnDroid to display GPS data on the Pwnagotchi screen.",
-    "author": "Jayofelony",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi-torch-plugins-main/pwndroid.py"
-  },
-  {
-    "name": "Touch_UI",
-    "version": "1.0.0",
-    "description": "Use touchscreen input to toggle settings.",
-    "author": "Sniffleupagus",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/Touch_UI.py"
+    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
+    "path_inside_zip": "Pwnagotchi-Plugins-main/auto_backup.py"
   },
   {
     "name": "auto_tune",
@@ -80,6 +40,16 @@
     "path_inside_zip": "pwnagotchi_plugins-main/auto_tune.py"
   },
   {
+    "name": "binary",
+    "version": "1.0.0",
+    "description": "Clock/Calendar for pwnagotchi",
+    "author": "NeonLightning",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/binary.py"
+  },
+  {
     "name": "blemon_plugin",
     "version": "1.0.0",
     "description": "An example plugin for pwnagotchi that implements all the available callbacks.",
@@ -90,6 +60,26 @@
     "path_inside_zip": "pwnagotchi_plugins-main/blemon_plugin.py"
   },
   {
+    "name": "bluetoothsniffer",
+    "version": "0.1.4",
+    "description": "A plugin that sniffs Bluetooth devices and saves their MAC addresses, name and counts to a JSON file",
+    "author": "diytechtinker, fixed by Jayofelony",
+    "category": "Hardware",
+    "origin_type": "zip",
+    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi-torch-plugins-main/bluetoothsniffer.py"
+  },
+  {
+    "name": "bt-logger",
+    "version": "1.0.7",
+    "description": "Logs and displays a count of bluetooth devices seen.",
+    "author": "NeonLightning",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/bt-logger.py"
+  },
+  {
     "name": "clock",
     "version": "1.0.2",
     "description": "Clock/Calendar for pwnagotchi",
@@ -98,6 +88,16 @@
     "origin_type": "zip",
     "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
     "path_inside_zip": "pwnagotchi_plugins-main/clock.py"
+  },
+  {
+    "name": "clock",
+    "version": "1.0.3",
+    "description": "Clock/Calendar for pwnagotchi",
+    "author": "originally https://github.com/LoganMD redone by NeonLightning",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/clock.py"
   },
   {
     "name": "cmd_server",
@@ -118,6 +118,16 @@
     "origin_type": "zip",
     "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
     "path_inside_zip": "pwnagotchi_plugins-main/console.py"
+  },
+  {
+    "name": "discord",
+    "version": "2.3.0",
+    "description": "Sends Pwnagotchi handshakes and session summaries to Discord, with location data from WiGLE. Persists a local cache of WiGLE lookups.",
+    "author": "WPA2",
+    "category": "Social",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
+    "path_inside_zip": "Pwnagotchi-Plugins-main/discord.py"
   },
   {
     "name": "display-password",
@@ -150,6 +160,16 @@
     "path_inside_zip": "pwnagotchi_plugins-main/enable_assoc.py"
   },
   {
+    "name": "enable_assocV2",
+    "version": "1.0.2.1",
+    "description": "Enable and disable ASSOC on the fly. Enabled when plugin loads, disabled when plugin unloads. No Touch screen here",
+    "author": "evilsocket@gmail.com",
+    "category": "Attack",
+    "origin_type": "zip",
+    "download_url": "https://github.com/unitMeasure/pwn-plugins/archive/main.zip",
+    "path_inside_zip": "pwn-plugins-main/enable_assocV2.py"
+  },
+  {
     "name": "enable_deauth",
     "version": "1.0.0",
     "description": "Enable and disable DEAUTH on the fly. Enabled when plugin loads, disabled when plugin unloads.",
@@ -158,6 +178,16 @@
     "origin_type": "zip",
     "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
     "path_inside_zip": "pwnagotchi_plugins-main/enable_deauth.py"
+  },
+  {
+    "name": "enable_deauthV2",
+    "version": "1.0.1.1",
+    "description": "Enable and disable DEAUTH on the fly. Enabled when plugin loads, disabled when plugin unloads. No Touch screen here",
+    "author": "Sniffleupagus",
+    "category": "Attack",
+    "origin_type": "zip",
+    "download_url": "https://github.com/unitMeasure/pwn-plugins/archive/main.zip",
+    "path_inside_zip": "pwn-plugins-main/enable_deauthV2.py"
   },
   {
     "name": "fix_brcmf_plugin",
@@ -170,6 +200,26 @@
     "path_inside_zip": "pwnagotchi_plugins-main/fix_brcmf_plugin.py"
   },
   {
+    "name": "fix_region",
+    "version": "1.0.0.1",
+    "description": "Let you change the iw region to unlock channel",
+    "author": "@V0rT3x https://github.com/V0r-T3x",
+    "category": "System",
+    "origin_type": "zip",
+    "download_url": "https://github.com/unitMeasure/pwn-plugins/archive/main.zip",
+    "path_inside_zip": "pwn-plugins-main/fix_region.py"
+  },
+  {
+    "name": "fluxmod",
+    "version": "1.0.3",
+    "description": "Changes ui.invert on a timer",
+    "author": "NeonLightning",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/fluxmod.py"
+  },
+  {
     "name": "gps_more",
     "version": "1.0.1",
     "description": "Save GPS coordinates whenever it seems reasonable. on epoch to get starting point, handshake to update.",
@@ -180,6 +230,26 @@
     "path_inside_zip": "pwnagotchi_plugins-main/gps_more.py"
   },
   {
+    "name": "gpsdeasy",
+    "version": "1.3.4",
+    "description": "uses gpsd to report lat/long on the screen and setup bettercap pcap gps logging",
+    "author": "discord@rai68",
+    "category": "GPS",
+    "origin_type": "zip",
+    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi-torch-plugins-main/gpsdeasy.py"
+  },
+  {
+    "name": "handshakes-dl",
+    "version": "0.2.1",
+    "description": "Download handshake captures from web-ui.",
+    "author": "me@sayakb.com",
+    "category": "Attack",
+    "origin_type": "zip",
+    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi-torch-plugins-main/handshakes-dl.py"
+  },
+  {
     "name": "instattack",
     "version": "1.1.0",
     "description": "Pwn more aggressively. Launch immediate associate or deauth attack when bettercap spots a device.",
@@ -188,6 +258,66 @@
     "origin_type": "zip",
     "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
     "path_inside_zip": "pwnagotchi_plugins-main/instattack.py"
+  },
+  {
+    "name": "internet-conection",
+    "version": "1.2.4",
+    "description": "A plugin that displays the Internet connection status on the pwnagotchi display.",
+    "author": "neonlightning",
+    "category": "System",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/internet-conection.py"
+  },
+  {
+    "name": "internet-connection",
+    "version": "1.2.1",
+    "description": "A plugin that displays the Internet connection status on the pwnagotchi display.",
+    "author": "@jayofelony",
+    "category": "System",
+    "origin_type": "zip",
+    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi-torch-plugins-main/internet-connection.py"
+  },
+  {
+    "name": "IPDisplay",
+    "version": "1.0.0",
+    "description": "Display IP addresses on the Pwnagotchi UI",
+    "author": "NeonLightning(thank to NurseJackass and jayofelony)",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/IPDisplay.py"
+  },
+  {
+    "name": "mad_hatter",
+    "version": "1.2.2",
+    "description": "Universal enhanced plugin for various UPS HATs: Battery indicator, voltage, auto-shutdown, polling, UI customization, error diagnostics, health monitoring, auto-detection, and improved charging detection with calibration.",
+    "author": "AlienMajik",
+    "category": "Hardware",
+    "origin_type": "zip",
+    "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/mad_hatter.py"
+  },
+  {
+    "name": "memtemp-plus",
+    "version": "1.0.3",
+    "description": "A plugin that will display memory/cpu usage and temperature",
+    "author": "https://github.com/xenDE",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi-torch-plugins-main/memtemp-plus.py"
+  },
+  {
+    "name": "memtempV2",
+    "version": "0.0.1",
+    "description": "A plugin that will display memory, cpu usage, load, and temperature, can show as many as you want",
+    "author": "https://github.com/xenDE",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/unitMeasure/pwn-plugins/archive/main.zip",
+    "path_inside_zip": "pwn-plugins-main/memtempV2.py"
   },
   {
     "name": "meshpwnstic",
@@ -230,66 +360,6 @@
     "path_inside_zip": "pwnagotchi_plugins-main/morse_code.py"
   },
   {
-    "name": "pause_recon",
-    "version": "1.0.0",
-    "description": "Override pwnagotchi.agent calls to pause recon without triggering blind reboots",
-    "author": "Sniffleupagus",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/pause_recon.py"
-  },
-  {
-    "name": "pwnaware",
-    "version": "1.0.0",
-    "description": "display information from dump1090 about nearby airplanes",
-    "author": "evilsocket@gmail.com",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/pwnaware.py"
-  },
-  {
-    "name": "rss_voice",
-    "version": "1.0.0",
-    "description": "Use RSS Feeds to replace canned voice messages on various events",
-    "author": "Sniffleupagus",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/rss_voice.py"
-  },
-  {
-    "name": "spam_peers",
-    "version": "1.0.1",
-    "description": "Automatically send message to a new peers",
-    "author": "@Sniffleupagus",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/spam_peers.py"
-  },
-  {
-    "name": "speak_to_me",
-    "version": "1.0.0",
-    "description": "Speech output plugin",
-    "author": "sniffleupagus",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/speak_to_me.py"
-  },
-  {
-    "name": "tweak_view",
-    "version": "1.1.1",
-    "description": "Edit the UI layout. Ugly interface, no guardrails. Be careful!!!",
-    "author": "Sniffleupagus",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/tweak_view.py"
-  },
-  {
     "name": "neonbot",
     "version": "0.8.0",
     "description": "Telegram QR and control bot.",
@@ -298,206 +368,6 @@
     "origin_type": "zip",
     "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
     "path_inside_zip": "pwny-main/B0rk3d/neonbot.py"
-  },
-  {
-    "name": "IPDisplay",
-    "version": "1.0.0",
-    "description": "Display IP addresses on the Pwnagotchi UI",
-    "author": "NeonLightning(thank to NurseJackass and jayofelony)",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/IPDisplay.py"
-  },
-  {
-    "name": "binary",
-    "version": "1.0.0",
-    "description": "Clock/Calendar for pwnagotchi",
-    "author": "NeonLightning",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/binary.py"
-  },
-  {
-    "name": "bt-logger",
-    "version": "1.0.7",
-    "description": "Logs and displays a count of bluetooth devices seen.",
-    "author": "NeonLightning",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/bt-logger.py"
-  },
-  {
-    "name": "clock",
-    "version": "1.0.3",
-    "description": "Clock/Calendar for pwnagotchi",
-    "author": "originally https://github.com/LoganMD redone by NeonLightning",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/clock.py"
-  },
-  {
-    "name": "fluxmod",
-    "version": "1.0.3",
-    "description": "Changes ui.invert on a timer",
-    "author": "NeonLightning",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/fluxmod.py"
-  },
-  {
-    "name": "internet-conection",
-    "version": "1.2.4",
-    "description": "A plugin that displays the Internet connection status on the pwnagotchi display.",
-    "author": "neonlightning",
-    "category": "System",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/internet-conection.py"
-  },
-  {
-    "name": "service_uptime",
-    "version": "1.0.8",
-    "description": "Logs and displays Pwnagotchi service uptime",
-    "author": "neonlightning",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/service_uptime.py"
-  },
-  {
-    "name": "sorted-password-list",
-    "version": "3.0.0",
-    "description": "List cracked passwords and show count of them.",
-    "author": "neonlightning",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/sorted-password-list.py"
-  },
-  {
-    "name": "uncracked",
-    "version": "1.0.5",
-    "description": "Download handshake not found in wpa-sec from web-ui.",
-    "author": "NeonLightning",
-    "category": "Attack",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/uncracked.py"
-  },
-  {
-    "name": "weather2pwn",
-    "version": "2.4.6",
-    "description": "Weather display from gps data or city id, with optional logging",
-    "author": "NeonLightning",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/weather2pwn.py"
-  },
-  {
-    "name": "webssh",
-    "version": "1.0.0",
-    "description": "A plugin to run WebSSH",
-    "author": "Your Name",
-    "category": "System",
-    "origin_type": "zip",
-    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
-    "path_inside_zip": "pwny-main/webssh.py"
-  },
-  {
-    "name": "upslite_plugin_1_3",
-    "version": "1.0.0",
-    "description": "A plugin that will add a voltage indicator for the UPS Lite v1.3",
-    "author": "evilsocket@gmail.com",
-    "category": "Hardware",
-    "origin_type": "zip",
-    "download_url": "https://github.com/marbasec/UPSLite_Plugin_1_3/archive/master.zip",
-    "path_inside_zip": "UPSLite_Plugin_1_3-main/upslite_plugin_1_3.py"
-  },
-  {
-    "name": "auto_backup",
-    "version": "1.2.1",
-    "description": "Backs up files when internet is available. Creates compressed, safe backups.",
-    "author": "WPA2",
-    "category": "System",
-    "origin_type": "zip",
-    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
-    "path_inside_zip": "Pwnagotchi-Plugins-main/auto_backup.py"
-  },
-  {
-    "name": "discord",
-    "version": "2.3.0",
-    "description": "Sends Pwnagotchi handshakes and session summaries to Discord, with location data from WiGLE. Persists a local cache of WiGLE lookups.",
-    "author": "WPA2",
-    "category": "Social",
-    "origin_type": "zip",
-    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
-    "path_inside_zip": "Pwnagotchi-Plugins-main/discord.py"
-  },
-  {
-    "name": "web2ssh",
-    "version": "0.1.0",
-    "description": "A Plugin to issue SSH commands via a browser",
-    "author": "WPA2",
-    "category": "System",
-    "origin_type": "zip",
-    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
-    "path_inside_zip": "Pwnagotchi-Plugins-main/web2ssh.py"
-  },
-  {
-    "name": "wiglelocator",
-    "version": "1.0.0",
-    "description": "Fetches AP location data from WiGLE and saves it with handshake files",
-    "author": "WPA2",
-    "category": "GPS",
-    "origin_type": "zip",
-    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
-    "path_inside_zip": "Pwnagotchi-Plugins-main/wiglelocator.py"
-  },
-  {
-    "name": "wardriver",
-    "version": "2.3",
-    "description": "A wardriving plugin for pwnagotchi. Saves all networks seen and uploads data to WiGLE once internet is available",
-    "author": "CyberArtemio",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/cyberartemio/wardriver-pwnagotchi-plugin/archive/main.zip",
-    "path_inside_zip": "wardriver-pwnagotchi-plugin-main/wardriver.py"
-  },
-  {
-    "name": "adsbsniffer",
-    "version": "0.1.0",
-    "description": "A plugin that captures ADS-B data from aircraft using RTL-SDR and logs it.",
-    "author": "4li3nMaJ1k",
-    "category": "Attack",
-    "origin_type": "zip",
-    "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/adsbsniffer.py"
-  },
-  {
-    "name": "age",
-    "version": "3.1.0",
-    "description": "An enhanced plugin with frequent titles, dynamic quotes, progress bars, random events, handshake streaks, personality evolution, and secret achievements. UI is optimized to avoid clutter.",
-    "author": "AlienMajik",
-    "category": "Display",
-    "origin_type": "zip",
-    "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/age.py"
-  },
-  {
-    "name": "mad_hatter",
-    "version": "1.2.2",
-    "description": "Universal enhanced plugin for various UPS HATs: Battery indicator, voltage, auto-shutdown, polling, UI customization, error diagnostics, health monitoring, auto-detection, and improved charging detection with calibration.",
-    "author": "AlienMajik",
-    "category": "Hardware",
-    "origin_type": "zip",
-    "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
-    "path_inside_zip": "pwnagotchi_plugins-main/mad_hatter.py"
   },
   {
     "name": "neurolyzer",
@@ -520,6 +390,26 @@
     "path_inside_zip": "pwnagotchi_plugins-main/neurolyzerbeta.py"
   },
   {
+    "name": "NoGPSPrivacy",
+    "version": "0.0.2.6",
+    "description": "Privacy nightmare for devices that don",
+    "author": "glenn@pegden.com.com",
+    "category": "GPS",
+    "origin_type": "zip",
+    "download_url": "https://github.com/unitMeasure/pwn-plugins/archive/main.zip",
+    "path_inside_zip": "pwn-plugins-main/NoGPSPrivacy.py"
+  },
+  {
+    "name": "pause_recon",
+    "version": "1.0.0",
+    "description": "Override pwnagotchi.agent calls to pause recon without triggering blind reboots",
+    "author": "Sniffleupagus",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/pause_recon.py"
+  },
+  {
     "name": "probenpwn",
     "version": "1.6.0",
     "description": "Aggressively capture handshakes with two modes: Tactical (smart and efficient",
@@ -528,6 +418,56 @@
     "origin_type": "zip",
     "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
     "path_inside_zip": "pwnagotchi_plugins-main/probenpwn.py"
+  },
+  {
+    "name": "probeReq",
+    "version": "0.0.0.3",
+    "description": "Listens for Wi-Fi probe requests and displays them on screen and in your logs",
+    "author": "avipars",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/unitMeasure/pwn-plugins/archive/main.zip",
+    "path_inside_zip": "pwn-plugins-main/probeReq.py"
+  },
+  {
+    "name": "pwnaware",
+    "version": "1.0.0",
+    "description": "display information from dump1090 about nearby airplanes",
+    "author": "evilsocket@gmail.com",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/pwnaware.py"
+  },
+  {
+    "name": "pwndroid",
+    "version": "1.1.003",
+    "description": "Plugin for the companion app PwnDroid to display GPS data on the Pwnagotchi screen.",
+    "author": "Jayofelony",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi-torch-plugins-main/pwndroid.py"
+  },
+  {
+    "name": "rss_voice",
+    "version": "1.0.0",
+    "description": "Use RSS Feeds to replace canned voice messages on various events",
+    "author": "Sniffleupagus",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/rss_voice.py"
+  },
+  {
+    "name": "service_uptime",
+    "version": "1.0.8",
+    "description": "Logs and displays Pwnagotchi service uptime",
+    "author": "neonlightning",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/service_uptime.py"
   },
   {
     "name": "skyhigh",
@@ -560,6 +500,46 @@
     "path_inside_zip": "pwnagotchi_plugins-main/snooprbeta.py"
   },
   {
+    "name": "sorted-password-list",
+    "version": "3.0.0",
+    "description": "List cracked passwords and show count of them.",
+    "author": "neonlightning",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/sorted-password-list.py"
+  },
+  {
+    "name": "sorted_pwn",
+    "version": "0.0.2.1",
+    "description": "List cracked passwords from any potfile found in the handshakes directory",
+    "author": "37124354+dbukovac@users.noreply.github.com",
+    "category": "Attack",
+    "origin_type": "zip",
+    "download_url": "https://github.com/unitMeasure/pwn-plugins/archive/main.zip",
+    "path_inside_zip": "pwn-plugins-main/sorted_pwn.py"
+  },
+  {
+    "name": "spam_peers",
+    "version": "1.0.1",
+    "description": "Automatically send message to a new peers",
+    "author": "@Sniffleupagus",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/spam_peers.py"
+  },
+  {
+    "name": "speak_to_me",
+    "version": "1.0.0",
+    "description": "Speech output plugin",
+    "author": "sniffleupagus",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/speak_to_me.py"
+  },
+  {
     "name": "theylive",
     "version": "1.2.0",
     "description": "Sets up and installs gpsd to report lat/long on the screen and setup bettercap pcap gps logging. Added support for PwnDroid for GPS sharing via Android app over Bluetooth tether. Enhancements: Streamed GPSD data, retries, more fields, efficiency improvements.",
@@ -568,5 +548,95 @@
     "origin_type": "zip",
     "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
     "path_inside_zip": "pwnagotchi_plugins-main/theylive.py"
+  },
+  {
+    "name": "Touch_UI",
+    "version": "1.0.0",
+    "description": "Use touchscreen input to toggle settings.",
+    "author": "Sniffleupagus",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/Touch_UI.py"
+  },
+  {
+    "name": "tweak_view",
+    "version": "1.1.1",
+    "description": "Edit the UI layout. Ugly interface, no guardrails. Be careful!!!",
+    "author": "Sniffleupagus",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
+    "path_inside_zip": "pwnagotchi_plugins-main/tweak_view.py"
+  },
+  {
+    "name": "uncracked",
+    "version": "1.0.5",
+    "description": "Download handshake not found in wpa-sec from web-ui.",
+    "author": "NeonLightning",
+    "category": "Attack",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/uncracked.py"
+  },
+  {
+    "name": "upslite_plugin_1_3",
+    "version": "1.0.0",
+    "description": "A plugin that will add a voltage indicator for the UPS Lite v1.3",
+    "author": "evilsocket@gmail.com",
+    "category": "Hardware",
+    "origin_type": "zip",
+    "download_url": "https://github.com/marbasec/UPSLite_Plugin_1_3/archive/master.zip",
+    "path_inside_zip": "UPSLite_Plugin_1_3-main/upslite_plugin_1_3.py"
+  },
+  {
+    "name": "wardriver",
+    "version": "2.3",
+    "description": "A wardriving plugin for pwnagotchi. Saves all networks seen and uploads data to WiGLE once internet is available",
+    "author": "CyberArtemio",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/cyberartemio/wardriver-pwnagotchi-plugin/archive/main.zip",
+    "path_inside_zip": "wardriver-pwnagotchi-plugin-main/wardriver.py"
+  },
+  {
+    "name": "weather2pwn",
+    "version": "2.4.6",
+    "description": "Weather display from gps data or city id, with optional logging",
+    "author": "NeonLightning",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/weather2pwn.py"
+  },
+  {
+    "name": "web2ssh",
+    "version": "0.1.0",
+    "description": "A Plugin to issue SSH commands via a browser",
+    "author": "WPA2",
+    "category": "System",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
+    "path_inside_zip": "Pwnagotchi-Plugins-main/web2ssh.py"
+  },
+  {
+    "name": "webssh",
+    "version": "1.0.0",
+    "description": "A plugin to run WebSSH",
+    "author": "Your Name",
+    "category": "System",
+    "origin_type": "zip",
+    "download_url": "https://github.com/NeonLightning/pwny/archive/master.zip",
+    "path_inside_zip": "pwny-main/webssh.py"
+  },
+  {
+    "name": "wiglelocator",
+    "version": "1.0.0",
+    "description": "Fetches AP location data from WiGLE and saves it with handshake files",
+    "author": "WPA2",
+    "category": "GPS",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
+    "path_inside_zip": "Pwnagotchi-Plugins-main/wiglelocator.py"
   }
 ]
