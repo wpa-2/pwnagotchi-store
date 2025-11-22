@@ -69,6 +69,24 @@
         }
         .social-link:hover { color: #000; background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
 
+        /* --- INSTALL BANNER (NEW) --- */
+        .install-banner {
+            max-width: 800px; margin: 40px auto 60px auto; background: #0a0a0a;
+            border: 1px dashed var(--accent); border-radius: 12px; padding: 20px;
+            text-align: center; position: relative;
+        }
+        .install-title { font-family: var(--font-pixel); font-size: 1.4rem; color: var(--accent); margin-bottom: 10px; }
+        .install-cmd {
+            background: #000; color: #ccc; font-family: var(--font-mono); padding: 15px;
+            border-radius: 6px; border: 1px solid #333; font-size: 0.9rem; word-break: break-all;
+            cursor: pointer; transition: all 0.2s; position: relative;
+        }
+        .install-cmd:hover { border-color: var(--accent); color: #fff; }
+        .install-cmd:hover::after {
+            content: "CLICK TO COPY"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            color: var(--accent); font-family: var(--font-pixel); font-size: 1rem; background: #000; padding-left: 10px;
+        }
+
         /* Filters */
         .filters { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
         .filter-btn {
@@ -153,7 +171,6 @@
         .modal { background: #1a1a1a; padding: 30px; border-radius: 16px; width: 90%; max-width: 600px; text-align: left; box-shadow: 0 20px 60px rgba(0,0,0,0.8); border: 1px solid #333; }
         
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        
         .modal h3 { margin: 0; color: #fff; font-size: 2rem; font-family: 'VT323', monospace; color: var(--accent); letter-spacing: 1px; }
         
         .close-x { 
@@ -164,11 +181,7 @@
 
         /* Command Rows */
         .cmd-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        
-        .cmd-label { 
-            width: 85px; font-size: 0.85rem; font-weight: 800; font-family: var(--font-main); 
-            text-align: right; letter-spacing: 0.5px;
-        }
+        .cmd-label { width: 85px; font-size: 0.85rem; font-weight: 800; font-family: var(--font-main); text-align: right; letter-spacing: 0.5px; }
         
         .cmd-box { 
             flex-grow: 1; background: #000; color: #ccc; font-family: 'VT323', monospace; font-size: 1.2rem;
@@ -177,13 +190,11 @@
             white-space: nowrap; overflow-x: auto; scrollbar-width: none;
         }
         .cmd-box::-webkit-scrollbar { display: none; }
-        
         .cmd-box:hover { border-color: #666; color: #fff; background: #0a0a0a; }
         .cmd-box:active { transform: scale(0.98); }
         
         .cmd-box:hover::after {
-            content: "COPY";
-            position: absolute; right: 0; top: 0; bottom: 0;
+            content: "COPY"; position: absolute; right: 0; top: 0; bottom: 0;
             background: linear-gradient(to right, transparent, #0a0a0a 20%);
             padding: 0 15px; display: flex; align-items: center;
             color: var(--accent); font-size: 0.8rem; font-family: var(--font-main); font-weight: bold;
@@ -210,6 +221,13 @@
             <a href="https://opwngrid.xyz/search/a1dcea78603b44e3fc3de09f0b9a0a5e28ffbd2e69429494e0d77bb34a2623ea" target="_blank" class="social-link">[PWNMAIL]</a>
         </nav>
     </header>
+
+    <div class="install-banner">
+        <div class="install-title">INSTALL PWNSTORE</div>
+        <div class="install-cmd" onclick="copyText(this)">
+            sudo wget -O /usr/local/bin/pwnstore https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/pwnstore.py && sudo chmod +x /usr/local/bin/pwnstore
+        </div>
+    </div>
 
     <div class="filters">
         <button class="filter-btn active" onclick="setCategory('All')">All</button>
