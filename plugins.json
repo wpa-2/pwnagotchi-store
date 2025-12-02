@@ -651,10 +651,10 @@
   },
   {
     "name": "wiglelocator",
-    "version": "1.0.0",
-    "description": "Fetches AP location data from WiGLE and saves it with handshake files",
+    "version": "2.0",
+    "description": "Async WiGLE locator with caching, offline queueing, and Web UI map",
     "author": "WPA2",
-    "category": "GPS",
+    "category": "Display",
     "origin_type": "zip",
     "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
     "path_inside_zip": "Pwnagotchi-Plugins-main/wiglelocator.py"
