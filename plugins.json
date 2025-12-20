@@ -641,8 +641,8 @@
   },
   {
     "name": "wiglelocator",
-    "version": "2.1.6",
-    "description": "Async WiGLE locator with max retries and strict 429 backoff",
+    "version": "2.1.11",
+    "description": "Async WiGLE locator with flush capability and absolute path routing",
     "author": "WPA2",
     "category": "GPS",
     "origin_type": "zip",
