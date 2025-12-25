@@ -590,6 +590,16 @@
     "path_inside_zip": "pwny-main/uncracked.py"
   },
   {
+    "name": "upslite_plugin_1_3",
+    "version": "1.0.0",
+    "description": "A plugin that will add a voltage indicator for the UPS Lite v1.3",
+    "author": "evilsocket@gmail.com",
+    "category": "Hardware",
+    "origin_type": "zip",
+    "download_url": "https://github.com/marbasec/UPSLite_Plugin_1_3/archive/master.zip",
+    "path_inside_zip": "UPSLite_Plugin_1_3-main/upslite_plugin_1_3.py"
+  },
+  {
     "name": "wardriver",
     "version": "2.3",
     "description": "A wardriving plugin for pwnagotchi. Saves all networks seen and uploads data to WiGLE once internet is available",
