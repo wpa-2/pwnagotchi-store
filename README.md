@@ -132,8 +132,8 @@ sudo pwnstore install <plugin_name>
 
 #### Manage Updates
 ```bash
-sudo pwnstore update      # Update the store tool itself
-sudo pwnstore upgrade     # Check for plugin updates
+sudo pwnstore update      # Plugin updates
+sudo pwnstore upgrade     # Pwnstore upgrades
 ```
 
 #### Uninstall a Plugin
