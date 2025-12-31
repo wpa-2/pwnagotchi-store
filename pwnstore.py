@@ -35,7 +35,7 @@ def banner():
     print(r" | |_) \ \ /\ / / '_ \ (___| |_ ___  _ __ ___  ")
     print(r" |  __/ \ V  V /| | | \___ \ __/ _ \| '__/ _ \ ")
     print(r" | |     \_/\_/ |_| |_|____/ || (_) | | |  __/ ")
-    print(r" |_|   v2.5 (Clean Auth) \_____/\__\___/|_|  \___| ")
+    print(r" |_|   v2.6 (config fixes) \_____/\__\___/|_|  \___| ")
     print(f"{RESET}")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
@@ -310,8 +310,15 @@ def install_plugin(args):
         print(f"{RED}[!] Plugin '{target_name}' not found in registry.{RESET}")
         return
 
-    print(f"[*] Installing {CYAN}{target_name}{RESET} by {plugin_data['author']}...")
+    # Check if already installed
     final_file_path = os.path.join(CUSTOM_PLUGIN_DIR, f"{target_name}.py")
+    already_installed = os.path.exists(final_file_path)
+    
+    if already_installed:
+        print(f"{YELLOW}[!] Plugin '{target_name}' is already installed.{RESET}")
+        print(f"{YELLOW}[*] Reinstalling (will update config if needed)...{RESET}")
+
+    print(f"[*] Installing {CYAN}{target_name}{RESET} by {plugin_data['author']}...")
 
     try:
         if plugin_data.get('origin_type') == 'zip':
@@ -333,12 +340,13 @@ def install_plugin(args):
         print(f"{GREEN}[+] Successfully installed to {final_file_path}{RESET}")
         update_config(target_name, enable=True)
         
-        # Smart Config Scan
-        params = scan_for_config_params(final_file_path, target_name)
-        if params:
-            print(f"\n{YELLOW}[!] CONFIGURATION REQUIRED:{RESET}")
-            print(f"This plugin references the following options. Add them to config.toml:")
-            for p in params: print(f"  main.plugins.{target_name}.{p} = \"...\"")
+        # Smart Config Scan (only show on first install, not reinstall)
+        if not already_installed:
+            params = scan_for_config_params(final_file_path, target_name)
+            if params:
+                print(f"\n{YELLOW}[!] CONFIGURATION REQUIRED:{RESET}")
+                print(f"This plugin references the following options. Add them to config.toml:")
+                for p in params: print(f"  main.plugins.{target_name}.{p} = \"...\"")
             
     except Exception as e: print(f"{RED}[!] Installation failed: {e}{RESET}")
 
@@ -358,28 +366,49 @@ def uninstall_plugin(args):
     except Exception as e: print(f"{RED}[!] Error: {e}{RESET}")
 
 def update_config(plugin_name, enable=True):
-    """Updates config.toml with a blank line for new entries."""
+    """Updates config.toml, preventing duplicates with exact key matching."""
     try:
-        with open(CONFIG_FILE, "r") as f: lines = f.readlines()
+        with open(CONFIG_FILE, "r") as f: 
+            lines = f.readlines()
+        
         new_lines = []
         found = False
         config_key = f"main.plugins.{plugin_name}.enabled"
         
+        # Use regex for EXACT matching (not substring)
+        # This pattern matches: main.plugins.PLUGINNAME.enabled = true/false
+        # It won't match comments or other lines containing the key
+        pattern = re.compile(rf"^\s*{re.escape(config_key)}\s*=\s*(true|false)\s*$")
+        
         for line in lines:
-            if config_key in line:
-                found = True
-                new_lines.append(f"{config_key} = {'true' if enable else 'false'}\n")
+            if pattern.match(line.strip()):
+                # Found existing config line
+                if not found:  # Only update the FIRST occurrence
+                    found = True
+                    new_lines.append(f"{config_key} = {'true' if enable else 'false'}\n")
+                # If we find duplicates, skip them (this cleans up existing dupes)
             else:
                 new_lines.append(line)
         
+        # Only add new entry if not found AND we're enabling
         if not found and enable:
-            if new_lines and not new_lines[-1].endswith('\n'): new_lines[-1] += '\n'
+            # Ensure file ends with newline before adding
+            if new_lines and not new_lines[-1].endswith('\n'): 
+                new_lines[-1] += '\n'
             new_lines.append(f"\n{config_key} = true\n")
 
-        with open(CONFIG_FILE, "w") as f: f.writelines(new_lines)
+        # Write back to file
+        with open(CONFIG_FILE, "w") as f: 
+            f.writelines(new_lines)
+        
         state = "Enabled" if enable else "Disabled"
-        print(f"{GREEN}[+] Plugin {state} in config.toml. Restart required.{RESET}")
-    except Exception as e: print(f"{YELLOW}[!] Config update failed: {e}{RESET}")
+        if found:
+            print(f"{GREEN}[+] Plugin {state} in config.toml (already existed, updated). Restart required.{RESET}")
+        else:
+            print(f"{GREEN}[+] Plugin {state} in config.toml (new entry). Restart required.{RESET}")
+            
+    except Exception as e: 
+        print(f"{YELLOW}[!] Config update failed: {e}{RESET}")
 
 def main():
     banner()
