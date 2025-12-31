@@ -35,7 +35,7 @@ def banner():
     print(r" | |_) \ \ /\ / / '_ \ (___| |_ ___  _ __ ___  ")
     print(r" |  __/ \ V  V /| | | \___ \ __/ _ \| '__/ _ \ ")
     print(r" | |     \_/\_/ |_| |_|____/ || (_) | | |  __/ ")
-    print(r" |_|   v2.6 (config fixes) \_____/\__\___/|_|  \___| ")
+    print(r" |_|   v2.5 (Clean Auth) \_____/\__\___/|_|  \___| ")
     print(f"{RESET}")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
@@ -362,7 +362,7 @@ def uninstall_plugin(args):
     try:
         os.remove(file_path)
         print(f"{GREEN}[+] File removed.{RESET}")
-        update_config(target_name, enable=False)
+        remove_plugin_config(target_name)
     except Exception as e: print(f"{RED}[!] Error: {e}{RESET}")
 
 def update_config(plugin_name, enable=True):
@@ -409,6 +409,34 @@ def update_config(plugin_name, enable=True):
             
     except Exception as e: 
         print(f"{YELLOW}[!] Config update failed: {e}{RESET}")
+
+def remove_plugin_config(plugin_name):
+    """Completely remove ALL config entries for a plugin"""
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            lines = f.readlines()
+        
+        new_lines = []
+        plugin_prefix = f"main.plugins.{plugin_name}."
+        removed_count = 0
+        
+        for line in lines:
+            # Skip any line that starts with main.plugins.PLUGINNAME.
+            if line.strip().startswith(plugin_prefix):
+                removed_count += 1
+                continue
+            new_lines.append(line)
+        
+        with open(CONFIG_FILE, "w") as f:
+            f.writelines(new_lines)
+        
+        if removed_count > 0:
+            print(f"{GREEN}[+] Removed {removed_count} config entries for {plugin_name}{RESET}")
+        else:
+            print(f"{YELLOW}[!] No config entries found for {plugin_name}{RESET}")
+            
+    except Exception as e:
+        print(f"{YELLOW}[!] Config cleanup failed: {e}{RESET}")
 
 def main():
     banner()
