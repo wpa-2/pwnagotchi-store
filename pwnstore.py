@@ -35,7 +35,7 @@ def banner():
     print(r" | |_) \ \ /\ / / '_ \ (___| |_ ___  _ __ ___  ")
     print(r" |  __/ \ V  V /| | | \___ \ __/ _ \| '__/ _ \ ")
     print(r" | |     \_/\_/ |_| |_|____/ || (_) | | |  __/ ")
-    print(r" |_|   v2.5 (Clean Auth) \_____/\__\___/|_|  \___| ")
+    print(r" |_|   v2.7 (Config Fixes) \_____/\__\___/|_|  \___| ")
     print(f"{RESET}")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
@@ -47,6 +47,34 @@ def check_sudo():
 def is_safe_name(name):
     """Security: Prevents Path Traversal (e.g. ../../etc/passwd)"""
     return re.match(r'^[a-zA-Z0-9_-]+$', name) is not None
+
+def compare_versions(v1, v2):
+    """Compare semantic versions properly (v1.2.3 format)"""
+    try:
+        # Remove 'v' prefix and split
+        v1_parts = [int(x) for x in v1.lstrip('v').split('.')]
+        v2_parts = [int(x) for x in v2.lstrip('v').split('.')]
+        
+        # Pad to same length
+        while len(v1_parts) < len(v2_parts):
+            v1_parts.append(0)
+        while len(v2_parts) < len(v1_parts):
+            v2_parts.append(0)
+        
+        # Compare
+        for a, b in zip(v1_parts, v2_parts):
+            if a > b:
+                return 1  # v1 is newer
+            elif a < b:
+                return -1  # v2 is newer
+        return 0  # equal
+    except:
+        # Fallback to string comparison if parsing fails
+        if v1 > v2:
+            return 1
+        elif v1 < v2:
+            return -1
+        return 0
 
 def get_local_version(file_path):
     """Reads the __version__ string from a local file."""
@@ -241,9 +269,9 @@ def scan_for_config_params(file_path, plugin_name):
         pass
     return sorted(list(set(params)))
 
-def update_self(args):
+def upgrade_tool(args):
     check_sudo()
-    print(f"[*] Checking for tool updates...")
+    print(f"[*] Checking for PwnStore updates...")
     current_registry = get_registry_url()
     script_url = current_registry.replace("plugins.json", "pwnstore.py")
     
@@ -262,7 +290,35 @@ def update_self(args):
         print(f"{GREEN}[+] PwnStore updated successfully! Run 'pwnstore list' to verify version.{RESET}")
     except Exception as e: print(f"{RED}[!] Update failed: {e}{RESET}")
 
-def upgrade_plugins(args):
+def compare_versions(v1, v2):
+    """Compare two version strings (e.g., '2.2.1' vs '2.0.1')"""
+    # Remove 'v' prefix if present
+    v1 = v1.lstrip('v')
+    v2 = v2.lstrip('v')
+    
+    # Split into parts and convert to integers
+    try:
+        parts1 = [int(x) for x in v1.split('.')]
+        parts2 = [int(x) for x in v2.split('.')]
+    except:
+        # Fallback to string comparison if parsing fails
+        return v1 != v2
+    
+    # Pad shorter version with zeros
+    max_len = max(len(parts1), len(parts2))
+    parts1 += [0] * (max_len - len(parts1))
+    parts2 += [0] * (max_len - len(parts2))
+    
+    # Compare part by part
+    for p1, p2 in zip(parts1, parts2):
+        if p1 > p2:
+            return True  # v1 is newer
+        elif p1 < p2:
+            return False  # v2 is newer
+    
+    return False  # Same version
+
+def update_plugins(args):
     check_sudo()
     print(f"[*] Checking for plugin updates...")
     registry = fetch_registry()
@@ -276,7 +332,9 @@ def upgrade_plugins(args):
         if remote_data:
             local_ver = get_local_version(os.path.join(CUSTOM_PLUGIN_DIR, filename))
             remote_ver = remote_data['version']
-            if remote_ver != local_ver:
+            
+            # Only show if remote is NEWER than local (comparison = 1 means remote is newer)
+            if compare_versions(remote_ver, local_ver) > 0:
                 updates_found.append({"name": plugin_name, "local": local_ver, "remote": remote_ver})
 
     if not updates_found:
@@ -458,10 +516,10 @@ def main():
     parser_uninstall = subparsers.add_parser('uninstall', help='Uninstall a plugin')
     parser_uninstall.add_argument('name', type=str, help='Name of the plugin')
     parser_uninstall.set_defaults(func=uninstall_plugin)
-    parser_update = subparsers.add_parser('update', help='Update PwnStore tool to latest version')
-    parser_update.set_defaults(func=update_self)
-    parser_upgrade = subparsers.add_parser('upgrade', help='Check for and install plugin updates')
-    parser_upgrade.set_defaults(func=upgrade_plugins)
+    parser_upgrade = subparsers.add_parser('upgrade', help='Upgrade PwnStore tool to latest version')
+    parser_upgrade.set_defaults(func=upgrade_tool)
+    parser_update = subparsers.add_parser('update', help='Update all installed plugins to latest versions')
+    parser_update.set_defaults(func=update_plugins)
     args = parser.parse_args()
     if hasattr(args, 'func'): args.func(args)
     else: parser.print_help()
