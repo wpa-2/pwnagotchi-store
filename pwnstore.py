@@ -30,13 +30,13 @@ RESET = "\033[0m"
 
 def banner():
     print(f"{CYAN}")
-    print(r"  ____                _____ _                  ")
-    print(r" |  _ \ _      ___ __/ ____| |                 ")
-    print(r" | |_) \ \ /\ / / '_ \ (___| |_ ___  _ __ ___  ")
-    print(r" |  __/ \ V  V /| | | \___ \ __/ _ \| '__/ _ \ ")
-    print(r" | |     \_/\_/ |_| |_|____/ || (_) | | |  __/ ")
-    print(r" |_|   v2.7 (Fixes)  \_____/\__\___/|_|  \___| ")
+    print(r"    ____                 _____ __                 ")
+    print(r"   / __ \_      ______  / ___// /_____  ________  ")
+    print(r"  / /_/ / | /| / / __ \ \__ \/ __/ __ \/ ___/ _ \ ")
+    print(r" / ____/| |/ |/ / / / /___/ / /_/ /_/ / /  /  __/ ")
+    print(r"/_/     |__/|__/_/ /_//____/\__/\____/_/   \___/  ")
     print(f"{RESET}")
+    print(f"  {CYAN}v2.7{RESET} - Config Fixes")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
 def check_sudo():
