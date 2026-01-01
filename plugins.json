@@ -21,7 +21,7 @@
   },
   {
     "name": "auto_backup",
-    "version": "2.0",
+    "version": "2.1",
     "description": "Backs up files and cleans up old backups to save space.",
     "author": "WPA2",
     "category": "System",
@@ -80,6 +80,16 @@
     "path_inside_zip": "pwny-main/bt-logger.py"
   },
   {
+    "name": "bt-tether-helper",
+    "version": "0.9.0-beta",
+    "description": "Guided Bluetooth tethering with user instructions",
+    "author": "wsvdmeer",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wsvdmeer/pwnagotchi-plugins//archive/main.zip",
+    "path_inside_zip": "pwnagotchi-plugins-main/bt-tether-helper.py"
+  },
+  {
     "name": "clock",
     "version": "1.0.3",
     "description": "Clock/Calendar for pwnagotchi",
@@ -111,8 +121,8 @@
   },
   {
     "name": "discord",
-    "version": "2.6.0",
-    "description": "Sends Pwnagotchi handshakes (w/ pcap) and reports Last Session stats on boot/mode switch.",
+    "version": "3.0.1",
+    "description": "Enhanced Discord integration: sends handshakes with location data and session reports",
     "author": "WPA2",
     "category": "Social",
     "origin_type": "zip",
@@ -431,7 +441,7 @@
   },
   {
     "name": "pwndroid",
-    "version": "1.1.003",
+    "version": "1.1.004",
     "description": "Plugin for the companion app PwnDroid to display GPS data on the Pwnagotchi screen.",
     "author": "Jayofelony",
     "category": "Display",
@@ -448,6 +458,16 @@
     "origin_type": "zip",
     "download_url": "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",
     "path_inside_zip": "pwnagotchi_plugins-main/rss_voice.py"
+  },
+  {
+    "name": "rtc-datetime",
+    "version": "1.0.0",
+    "description": "Display current time and date",
+    "author": "wsvdmeer",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wsvdmeer/pwnagotchi-plugins//archive/main.zip",
+    "path_inside_zip": "pwnagotchi-plugins-main/rtc-datetime.py"
   },
   {
     "name": "service_uptime",
@@ -641,8 +661,8 @@
   },
   {
     "name": "wiglelocator",
-    "version": "2.0.1",
-    "description": "Async WiGLE locator with caching, offline queueing, and Web UI map",
+    "version": "2.2.1",
+    "description": "Async WiGLE locator with proper 429 handling and rate limiting",
     "author": "WPA2",
     "category": "GPS",
     "origin_type": "zip",
@@ -651,8 +671,8 @@
   },
   {
     "name": "wireguard",
-    "version": "1.9",
-    "description": "VPN Sync: Full backup on first run, then incremental only.",
+    "version": "2.1",
+    "description": "VPN Sync: Full backup on first run, then incremental only. (Enhanced Edition - Fixed)",
     "author": "WPA2",
     "category": "Display",
     "origin_type": "zip",
