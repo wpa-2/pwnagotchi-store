@@ -36,7 +36,7 @@ def banner():
     print(r" / ____/| |/ |/ / / / /___/ / /_/ /_/ / /  /  __/ ")
     print(r"/_/     |__/|__/_/ /_//____/\__/\____/_/   \___/  ")
     print(f"{RESET}")
-    print(f"  {CYAN}v2.7{RESET} - Config Fixes")
+    print(f"  {CYAN}v2.8{RESET} - Cant please some")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
 def check_sudo():
