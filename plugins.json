@@ -81,7 +81,7 @@
   },
   {
     "name": "bt-tether-helper",
-    "version": "0.9.0-beta",
+    "version": "0.9.5-beta",
     "description": "Guided Bluetooth tethering with user instructions",
     "author": "wsvdmeer",
     "category": "Display",
