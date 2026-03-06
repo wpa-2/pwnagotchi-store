@@ -302,15 +302,25 @@ def uninstall_plugin(args):
     except: pass
 
 def update_config(plugin_name, enable=True):
-    """Prevents duplicates by cleaning the plugin's block."""
     try:
         if not os.path.exists(CONFIG_FILE): return
         with open(CONFIG_FILE, "r") as f: lines = f.readlines()
-        prefix = f"main.plugins.{plugin_name}."
-        new_lines = [l for l in lines if not l.strip().startswith(prefix)]
+        section_header = f"[main.plugins.{plugin_name}]"
+        new_lines = []
+        skip_next = False
+        for line in lines:
+            if line.strip() == section_header:
+                skip_next = True
+                continue
+            if skip_next:
+                if line.strip().startswith("enabled"):
+                    continue
+                skip_next = False
+            new_lines.append(line)       
         if enable:
-            if new_lines and not new_lines[-1].endswith('\n'): new_lines[-1] += '\n'
-            new_lines.append(f"\n{prefix}enabled = true\n")
+            if new_lines and not new_lines[-1].endswith('\n'): 
+                new_lines[-1] += '\n'
+            new_lines.append(f"\n{section_header}\nenabled = true\n")        
         with open(CONFIG_FILE, "w") as f: f.writelines(new_lines)
     except: pass
 
