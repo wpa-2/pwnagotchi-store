@@ -698,5 +698,15 @@
     "origin_type": "zip",
     "download_url": "https://github.com/wpa-2/Pwnagotchi-Plugins/archive/master.zip",
     "path_inside_zip": "Pwnagotchi-Plugins-main/wireguard.py"
+  },
+  {
+    "name": "wpa-sec-list",
+    "version": "1.0.2",
+    "description": "Web UI plugin that lists cracked passwords from wpa-sec potfile in a searchable table.",
+    "author": "CoderFX",
+    "category": "Display",
+    "origin_type": "single",
+    "download_url": "https://raw.githubusercontent.com/CoderFX/pwnagotchi-plugins/main/wpa-sec-list.py",
+    "path_inside_zip": null
   }
 ]
