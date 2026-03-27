@@ -1,4 +1,4 @@
-https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip
+﻿https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip
 https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip
 https://github.com/NeonLightning/pwny/archive/master.zip
 https://github.com/marbasec/UPSLite_Plugin_1_3/archive/master.zip
@@ -8,5 +8,5 @@ https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip
 https://github.com/unitMeasure/pwn-plugins/archive/main.zip
 https://github.com/wsvdmeer/pwnagotchi-plugins/archive/main.zip
 https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/pwnstore_ui.py
-https://github.com/MrBumChinz/pwnrank/archive/master.zip
-https://raw.githubusercontent.com/MrBumChinz/community-quickdic/refs/heads/main/community_quickdic.py
+
+https://github.com/MrBumChinz/Pwnagotchi-Plugins/archive/main.zip

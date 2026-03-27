@@ -144,24 +144,33 @@ def list_plugins(args):
     print("-" * 80)
 
 def list_sources(args):
-    print(f"[*] Analyzing repository sources...")
+    print(f"[*] Fetching registry...")
     registry = fetch_registry()
-    sources = {} 
+    sources = {}
     for p in registry:
         url = p.get('download_url', '')
-        repo_name = "Unknown Source"
+        repo_key = "other"
+        repo_display = "Other/Local"
         if 'github.com' in url or 'githubusercontent.com' in url:
             parts = url.split('/')
-            try: repo_name = f"github.com/{parts[3]}/{parts[4]}"
-            except: repo_name = url[:40]
-        else: repo_name = "Other/Local"
-        sources[repo_name] = sources.get(repo_name, 0) + 1
-    print(f"\n{'REPOSITORY / SOURCE':<50} | {'PLUGINS'}")
-    print("-" * 65)
-    for source, count in sorted(sources.items()):
-        print(f"{source:<50} | {count}")
-    print("-" * 65)
-    print(f"Total indexed: {len(registry)}\n")
+            try:
+                user, repo = parts[3], parts[4]
+                repo_key = f"{user}/{repo}"
+                repo_display = f"https://github.com/{user}/{repo}"
+            except:
+                repo_key = url[:50]
+                repo_display = repo_key
+        if repo_key not in sources:
+            sources[repo_key] = {'display': repo_display, 'count': 0}
+        sources[repo_key]['count'] += 1
+
+    sorted_sources = sorted(sources.values(), key=lambda x: x['count'], reverse=True)
+    print(f"\n{'REPOSITORY':<55} | {'PLUGINS'}")
+    print("-" * 70)
+    for s in sorted_sources:
+        print(f"{s['display']:<55} | {s['count']}")
+    print("-" * 70)
+    print(f"Total repos: {len(sources)}  |  Total plugins indexed: {len(registry)}\n")
 
 def search_plugins(args):
     registry = fetch_registry()

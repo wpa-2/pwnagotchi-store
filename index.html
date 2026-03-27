@@ -261,6 +261,7 @@
 
     <div class="filters">
         <button class="filter-btn active" onclick="setCategory('All')">All</button>
+        <button class="filter-btn" onclick="setCategory('New')" style="border-color:#0a0;">New</button>
         <button class="filter-btn" onclick="setCategory('Display')">Display</button>
         <button class="filter-btn" onclick="setCategory('GPS')">GPS</button>
         <button class="filter-btn" onclick="setCategory('Social')">Social</button>
@@ -312,6 +313,8 @@
         function renderPlugins(list) {
             const grid = document.getElementById('plugin-grid');
             grid.innerHTML = "";
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             list.forEach(p => {
                 let cleanAuthor = p.author.replace(/<[^>]*>/g, "").trim().replace(/[\w\.-]+@[\w\.-]+/g, "").trim().replace(/^[0-9]+\+/, "").trim();
                 if(cleanAuthor.length > 20) cleanAuthor = cleanAuthor.substring(0, 18) + "...";
@@ -321,6 +324,7 @@
                 if(repoUrl.includes('/archive/')) repoUrl = repoUrl.split('/archive/')[0];
                 else if(repoUrl.includes('raw.githubusercontent.com')) repoUrl = repoUrl.replace('raw.githubusercontent.com', 'github.com').replace('/main/', '/blob/main/').replace('/master/', '/blob/master/');
 
+                const isNew = p.date_added && new Date(p.date_added) >= thirtyDaysAgo;
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
@@ -331,6 +335,7 @@
                     <div class="meta-row">
                         <div class="author">by ${cleanAuthor}</div>
                         <div class="badges">
+                            ${isNew ? '<span class="badge" style="background:#0a3a0a; color:#0f0; border:1px solid #0f0;">NEW</span>' : ''}
                             <span class="badge cat">${p.category || 'General'}</span>
                             <span class="badge">v${p.version}</span>
                         </div>
@@ -346,8 +351,13 @@
 
         function filterPlugins() {
             const term = document.getElementById('search').value.toLowerCase();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             const filtered = plugins.filter(p => {
                 const matchSearch = p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term);
+                if (currentCategory === 'New') {
+                    return matchSearch && p.date_added && new Date(p.date_added) >= thirtyDaysAgo;
+                }
                 const matchCat = currentCategory === 'All' || p.category === currentCategory;
                 return matchSearch && matchCat;
             });
@@ -385,39 +395,44 @@
             const text = "sudo wget -O /usr/local/bin/pwnstore https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/pwnstore.py && sudo chmod +x /usr/local/bin/pwnstore";
             const btn = document.getElementById('install-btn-text');
             
+            const onSuccess = () => { btn.innerText = "[COPIED!]"; setTimeout(() => btn.innerText = "[COPY]", 2000); };
+            const onFail = () => { btn.innerText = "[COPY FAILED]"; setTimeout(() => btn.innerText = "[COPY]", 2500); };
+            
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text);
+                navigator.clipboard.writeText(text).then(onSuccess).catch(onFail);
             } else {
                 const ta = document.createElement("textarea");
                 ta.value = text; ta.style.position="fixed"; ta.style.left="-9999px";
-                document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                document.body.appendChild(ta); ta.select();
+                const ok = document.execCommand('copy');
                 document.body.removeChild(ta);
+                ok ? onSuccess() : onFail();
             }
-            
-            const originalText = btn.innerText;
-            btn.innerText = "[COPIED!]";
-            setTimeout(() => btn.innerText = originalText, 2000);
         }
 
         // MODAL COPY
         function copyText(element) {
             const text = element.innerText;
-            element.style.borderColor = "var(--accent)";
-            element.style.color = "#fff";
+            
+            const onSuccess = () => {
+                element.style.borderColor = "var(--accent)"; element.style.color = "#fff";
+                setTimeout(() => { element.style.borderColor = "#333"; element.style.color = "#ccc"; }, 1500);
+            };
+            const onFail = () => {
+                element.style.borderColor = "var(--danger)"; element.style.color = "var(--danger)";
+                setTimeout(() => { element.style.borderColor = "#333"; element.style.color = "#ccc"; }, 2000);
+            };
             
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text);
+                navigator.clipboard.writeText(text).then(onSuccess).catch(onFail);
             } else {
                 const ta = document.createElement("textarea");
                 ta.value = text; ta.style.position="fixed"; ta.style.left="-9999px";
-                document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                document.body.appendChild(ta); ta.select();
+                const ok = document.execCommand('copy');
                 document.body.removeChild(ta);
+                ok ? onSuccess() : onFail();
             }
-
-            setTimeout(() => {
-                element.style.borderColor = "#333";
-                element.style.color = "#ccc";
-            }, 300);
         }
 
         window.onclick = e => { if(e.target == modal) closeModal(); }
