@@ -9,3 +9,5 @@ https://github.com/unitMeasure/pwn-plugins/archive/main.zip
 https://github.com/wsvdmeer/pwnagotchi-plugins/archive/main.zip
 https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/pwnstore_ui.py
 https://github.com/CoderFX/pwnagotchi-plugins/archive/main.zip
+https://github.com/PwnPeter/pwnagotchi-plugins/archive/master.zip
+https://github.com/adi170-alt/pwnagotchi_plugins/archive/main.zip
