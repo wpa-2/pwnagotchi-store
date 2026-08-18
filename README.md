@@ -21,7 +21,7 @@ sudo pwnstore install <plugin_name>
 
 ---
 
-## 📦 Four Ways to Use PwnStore
+## 📦 Four Ways to Use  PwnStore
 
 | Interface | Perfect For | Access |
 |-----------|-------------|--------|
@@ -47,8 +47,8 @@ sudo pwnstore install <plugin_name>
 
 ## ✨ Features
 
-- **📦 Lightweight:** No massive ZIP files—download only what you need
-- **🎯 Surgical Installs:** Single `.py` files or auto-extracted from archives
+- **📦 Lightweight:** No massive ZIP files - download only what you need
+- **🎯 Surgical Installs:** Single `.py` files are auto-extracted from archives
 - **🧠 Smart Config:** Automatically adds `enabled = true` to config.toml
 - **🔄 Auto-Update:** Keep plugins and PwnStore itself up to date
 - **📱 Mobile-Friendly:** Touch-optimized web interface
