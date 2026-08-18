@@ -160,6 +160,16 @@
     "path_inside_zip": "pwnagotchi_plugins-main/display-password.py"
   },
   {
+    "name": "display_manager",
+    "version": "1.0.0",
+    "description": "Web GUI for enabling/disabling display plugins and moving their UI elements.",
+    "author": "adondada",
+    "category": "Display",
+    "origin_type": "single",
+    "download_url": "https://raw.githubusercontent.com/adondada/pwnagotchi-display-manager/refs/heads/main/display_manager.py",
+    "path_inside_zip": null
+  },
+  {
     "name": "display_settings",
     "version": "1.0.1",
     "description": "Control backlight, and maybe other settings for displays.",
