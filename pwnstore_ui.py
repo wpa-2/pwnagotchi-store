@@ -3,7 +3,7 @@ PwnStore UI - Plugin Store for Pwnagotchi
 Browse and install plugins directly from the web UI
 
 Author: WPA2
-Version: 1.2.9
+Version: see __version__ on PwnStoreUI below
 """
 
 import logging
@@ -12,18 +12,12 @@ import subprocess
 import requests
 import os
 import re
+import secrets
+import hmac
 import _thread
 from flask import request, Response
 
 import pwnagotchi.plugins as plugins
-
-# Try to import csrf_exempt if available
-try:
-    from flask_wtf.csrf import CSRFProtect
-    from flask_wtf import csrf
-    CSRF_AVAILABLE = True
-except ImportError:
-    CSRF_AVAILABLE = False
 
 
 def is_safe_name(name):
@@ -40,6 +34,17 @@ class PwnStoreUI(plugins.Plugin):
     def __init__(self):
         self.ready = False
         self.store_url = "https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/plugins.json"
+        # Random per-process secret, embedded in the page and required back on
+        # every state-changing request. Regenerated on every pwnagotchi
+        # restart -- that's fine, it only needs to match what _render_store()
+        # hands out for the lifetime of this process. This replaces the old
+        # flask_wtf-based token, which was generated but never actually
+        # checked on the way back in.
+        self._csrf_token = secrets.token_hex(32)
+
+    def _csrf_valid(self, request):
+        token = request.headers.get('X-CSRFToken', '')
+        return hmac.compare_digest(token, self._csrf_token)
 
     def on_loaded(self):
         logging.info("[pwnstore_ui] Plugin loaded")
@@ -60,8 +65,10 @@ class PwnStoreUI(plugins.Plugin):
         return default
 
     # NOTE: All webhook endpoints are served behind pwnagotchi's built-in
-    # web UI basic auth. No additional auth layer is needed here as long as
-    # pwnagotchi's webcfg authentication is configured (which it is by default).
+    # web UI basic auth (configured by default), which is the only access
+    # control on the read-only routes. The state-changing routes below also
+    # require POST + a matching CSRF token, since Basic Auth alone doesn't
+    # stop a third-party page from riding the browser's cached credentials.
 
     def on_webhook(self, path, request):
         """Handle web requests to /plugins/pwnstore_ui/"""
@@ -70,27 +77,35 @@ class PwnStoreUI(plugins.Plugin):
             return Response(html, mimetype='text/html')
         elif path == "api/plugins":
             return self._get_plugins()
-        elif path == "api/install":
-            return self._install_plugin(request)
-        elif path == "api/uninstall":
-            return self._uninstall_plugin(request)
         elif path == "api/installed":
             return self._get_installed()
-        elif path == "api/configure":
-            return self._configure_plugin(request)
-        elif path == "api/restart":
-            return self._restart_pwnagotchi()
+        elif path in ("api/install", "api/uninstall", "api/configure", "api/restart"):
+            # These change state on the device (write files, run pwnstore,
+            # restart the service), so they must arrive as a POST carrying
+            # the token _render_store() handed out. Without this check, any
+            # page loaded in a browser that's already authenticated to the
+            # pwnagotchi web UI (basic auth is cached per-origin, not per-tab)
+            # could trigger them cross-site -- a plain <img> tag is enough
+            # for a GET, and a text/plain form POST is enough to reach
+            # get_json(force=True) on the JSON endpoints.
+            if request.method != 'POST':
+                return Response(json.dumps({'success': False, 'error': 'Method not allowed'}),
+                               status=405, mimetype='application/json')
+            if not self._csrf_valid(request):
+                return Response(json.dumps({'success': False, 'error': 'Invalid or missing CSRF token'}),
+                               status=403, mimetype='application/json')
+            if path == "api/install":
+                return self._install_plugin(request)
+            elif path == "api/uninstall":
+                return self._uninstall_plugin(request)
+            elif path == "api/configure":
+                return self._configure_plugin(request)
+            elif path == "api/restart":
+                return self._restart_pwnagotchi()
         return Response("Not found", status=404)
 
     def _render_store(self):
         """Render the main store interface"""
-        csrf_token = ''
-        try:
-            from flask_wtf.csrf import generate_csrf
-            csrf_token = generate_csrf()
-        except Exception:
-            pass
-
         html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -169,7 +184,7 @@ class PwnStoreUI(plugins.Plugin):
     <div class="stats"><span id="pluginCount">Loading plugins...</span></div>
     <div id="pluginsContainer" class="plugins-grid"></div>
 
-    <div class="footer">Built by <strong>WPA2</strong> &bull; v1.2.9 &bull; <a href="https://github.com/wpa-2/pwnagotchi-store" style="color: #0f0;">GitHub</a></div>
+    <div class="footer">Built by <strong>WPA2</strong> &bull; v__PLUGIN_VERSION__ &bull; <a href="https://github.com/wpa-2/pwnagotchi-store" style="color: #0f0;">GitHub</a></div>
 
     <script>
         let allPlugins = [];
@@ -178,11 +193,18 @@ class PwnStoreUI(plugins.Plugin):
         let searchTerm = '';
 
         // --- Security: HTML escaping for all dynamic content ---
+        // Escapes " and ' too, not just & < > -- this string gets interpolated
+        // into both element text AND attribute values below (data-name=,
+        // data-plugin=), and a plugin name/author/description containing a
+        // literal quote could otherwise break out of those attributes.
         function escHtml(str) {
             if (!str) return '';
-            const d = document.createElement('div');
-            d.appendChild(document.createTextNode(str));
-            return d.innerHTML;
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
 
         function getCSRFToken() {
@@ -415,7 +437,9 @@ class PwnStoreUI(plugins.Plugin):
 </body>
 </html>
         """
-        return html.replace('__CSRF_TOKEN__', csrf_token)
+        html = html.replace('__CSRF_TOKEN__', self._csrf_token)
+        html = html.replace('__PLUGIN_VERSION__', self.__version__)
+        return html
 
     def _restart_pwnagotchi(self):
         """Triggers a service restart in a separate thread"""

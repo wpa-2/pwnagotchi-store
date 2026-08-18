@@ -309,6 +309,22 @@
 
         fetch('plugins.json').then(r => r.json()).then(d => { plugins = d; renderPlugins(plugins); });
 
+        // --- Security: HTML-escape anything sourced from plugins.json ---
+        // name/author/description/version all ultimately come from
+        // community plugin repos' __author__/__description__/__version__
+        // strings (or the filename itself) via builder.py. A malicious repo
+        // could put markup in any of those, so nothing from the registry
+        // gets concatenated into innerHTML unescaped.
+        function escHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         function renderPlugins(list) {
             const grid = document.getElementById('plugin-grid');
             grid.innerHTML = "";
@@ -320,26 +336,32 @@
                 let repoUrl = p.download_url;
                 if(repoUrl.includes('/archive/')) repoUrl = repoUrl.split('/archive/')[0];
                 else if(repoUrl.includes('raw.githubusercontent.com')) repoUrl = repoUrl.replace('raw.githubusercontent.com', 'github.com').replace('/main/', '/blob/main/').replace('/master/', '/blob/master/');
+                // Only allow http/https links -- never let registry data set a javascript:/data: URL
+                const safeRepoUrl = /^https?:\/\//i.test(repoUrl) ? repoUrl : '#';
 
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
                     <div class="card-header">
-                        <h2>${p.name}</h2>
-                        <a href="${repoUrl}" target="_blank" class="repo-link" title="View Source">[REPO]</a>
+                        <h2>${escHtml(p.name)}</h2>
+                        <a href="${escHtml(safeRepoUrl)}" target="_blank" rel="noopener noreferrer" class="repo-link" title="View Source">[REPO]</a>
                     </div>
                     <div class="meta-row">
-                        <div class="author">by ${cleanAuthor}</div>
+                        <div class="author">by ${escHtml(cleanAuthor)}</div>
                         <div class="badges">
-                            <span class="badge cat">${p.category || 'General'}</span>
-                            <span class="badge">v${p.version}</span>
+                            <span class="badge cat">${escHtml(p.category || 'General')}</span>
+                            <span class="badge">v${escHtml(p.version)}</span>
                         </div>
                     </div>
-                    <div class="desc">${p.description}</div>
+                    <div class="desc">${escHtml(p.description)}</div>
                     <div class="install-overlay">
-                        <button class="install-btn" onclick="openModal('${p.name}')">COMMANDS</button>
+                        <button class="install-btn" type="button">COMMANDS</button>
                     </div>
                 `;
+                // Bound via addEventListener with the raw (unescaped) name, not
+                // interpolated into the onclick string -- avoids a second,
+                // attribute-context injection risk from names containing quotes.
+                card.querySelector('.install-btn').addEventListener('click', () => openModal(p.name));
                 grid.appendChild(card);
             });
         }

@@ -450,6 +450,16 @@
     "path_inside_zip": "pwn-plugins-main/probeReq.py"
   },
   {
+    "name": "pwn-companion",
+    "version": "2.0.1",
+    "description": "Device-side bridge to the PwnCompanion app: screen mirror, GPS, telemetry, captures, commands, and AI voice.",
+    "author": "wsvdmeer",
+    "category": "Attack",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wsvdmeer/pwn-companion/archive/main.zip",
+    "path_inside_zip": "pwn-companion-main/pwn-companion.py"
+  },
+  {
     "name": "pwnaware",
     "version": "1.0.0",
     "description": "display information from dump1090 about nearby airplanes",

@@ -14,13 +14,13 @@ import io
 import shutil
 import re
 
-__version__ = "3.3.3"
+__version__ = "3.3.4"
 
 # --- CONFIGURATION ---
 DEFAULT_REGISTRY = "https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/plugins.json"
 
 # Fallback if config.toml has no custom_plugins entry
-DEFAULT_CUSTOM_PLUGIN_DIR = "/etc/pwnagotchi/custom-plugins/"
+DEFAULT_CUSTOM_PLUGIN_DIR = "/usr/local/share/pwnagotchi/custom-plugins/"
 CONFIG_FILE = "/etc/pwnagotchi/config.toml"
 
 # ANSI Colors
@@ -38,7 +38,7 @@ def banner():
     print(r" / ____/| |/ |/ / / / /___/ / /_/ /_/ / /  /  __/ ")
     print(r"/_/     |__/|__/_/ /_//____/\__/\____/_/    \___/  ")
     print(f"{RESET}")
-    print(f"  {CYAN}v{__version__}{RESET} - Dynamic plugin directory from config")
+    print(f"  {CYAN}v{__version__}{RESET} - Config-safe updates")
     print(f"  Support the dev: {GREEN}https://buymeacoffee.com/wpa2{RESET}\n")
 
 def check_sudo():
@@ -107,14 +107,24 @@ def get_registry_url():
 def get_custom_plugin_dir():
     """Read the custom_plugins path from config.toml so pwnstore always installs
     to wherever pwnagotchi is configured to load plugins from.
+
+    Pwnagotchi's config layout has moved around over the years, so custom_plugins
+    is the single source of truth. Commented-out lines are ignored, and the last
+    uncommented definition wins (matching how TOML itself resolves duplicates).
     Falls back to DEFAULT_CUSTOM_PLUGIN_DIR if no config entry is found."""
     try:
         if os.path.exists(CONFIG_FILE):
-            with open(CONFIG_FILE, 'r') as f:
-                content = f.read()
-                match = re.search(r"(?:main\.)?custom_plugins\s*=\s*[\"'](.+?)[\"']", content)
-                if match:
-                    return match.group(1).rstrip('/')
+            found = None
+            with open(CONFIG_FILE, 'r', errors='ignore') as f:
+                for line in f:
+                    stripped = line.strip()
+                    if not stripped or stripped.startswith('#'):
+                        continue
+                    match = re.match(r"^(?:main\.)?custom_plugins\s*=\s*[\"'](.+?)[\"']", stripped)
+                    if match:
+                        found = match.group(1).strip()
+            if found:
+                return found.rstrip('/')
     except Exception:
         pass
     return DEFAULT_CUSTOM_PLUGIN_DIR.rstrip('/')
@@ -321,14 +331,24 @@ def _install_plugin_by_name(name, registry=None):
             with open(final_file_path, "wb") as f: f.write(r.content)
 
         print(f"{GREEN}[+] Installed to {final_file_path}{RESET}")
-        update_config(name, enable=True)
+
+        # Only write config for a first-time install. Re-enabling on an update
+        # would wipe any keys the user has set for this plugin.
         if not already_installed:
+            if plugin_has_config(name):
+                print(f"{YELLOW}[!] Existing config found — left untouched.{RESET}")
+            else:
+                update_config(name, enable=True)
+                print(f"{GREEN}[+] Enabled in config.toml{RESET}")
+
             print(f"\n{YELLOW}[!] Configuration may be required{RESET}")
             repo_url = plugin_data.get('download_url', '')
             if '/archive/' in repo_url:
                 repo_url = repo_url.split('/archive/')[0]
             print(f"{CYAN}View setup docs: {repo_url}{RESET}")
-            print(f"{CYAN}Edit config: /etc/pwnagotchi/config.toml{RESET}")
+            print(f"{CYAN}Edit config: {CONFIG_FILE}{RESET}")
+        else:
+            print(f"{CYAN}[*] Existing config left untouched.{RESET}")
         return True
     except Exception as e:
         print(f"{RED}[!] Failed: {e}{RESET}")
@@ -417,33 +437,76 @@ def uninstall_plugin(args):
     except Exception as e:
         print(f"{RED}[!] Failed to remove: {e}{RESET}")
 
+def _strip_plugin_config(lines, plugin_name):
+    """Remove every trace of a plugin's config from config.toml lines.
+
+    Pwnagotchi accepts two equivalent forms and older PwnStore versions wrote the
+    dotted one, so both must be stripped. Leaving one behind while writing the
+    other produces a duplicate key that TOML refuses to parse, which stops
+    pwnagotchi from booting:
+
+        main.plugins.foo.enabled = true      <- dotted
+        [main.plugins.foo]                   <- section
+        enabled = true
+    """
+    section_header = f"[main.plugins.{plugin_name}]"
+    dotted_prefix = f"main.plugins.{plugin_name}."
+    kept = []
+    inside_section = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped == section_header:
+            inside_section = True
+            continue
+        # Any new table header ends the section we're skipping.
+        if inside_section and stripped.startswith("["):
+            inside_section = False
+        if inside_section:
+            continue
+        if stripped.startswith(dotted_prefix):
+            continue
+        kept.append(line)
+    return kept
+
+def plugin_has_config(plugin_name):
+    """True if config.toml already has settings for this plugin."""
+    try:
+        if not os.path.exists(CONFIG_FILE): return False
+        with open(CONFIG_FILE, "r", errors='ignore') as f: lines = f.readlines()
+        return len(_strip_plugin_config(lines, plugin_name)) != len(lines)
+    except Exception:
+        return False
+
 def update_config(plugin_name, enable=True):
-    """Remove the plugin's entire TOML section then re-append if enabling.
-    Handles extra user config under the section without orphaning those lines."""
+    """Enable a plugin in config.toml without touching the user's own settings.
+
+    Only ever called for a fresh install or an uninstall, never on update -- an
+    update must not clobber keys the user has set (API tokens, VPN keys, display
+    positions). Rewrites are done via a temp file so an interrupted write can't
+    leave a truncated config behind.
+    """
     try:
         if not os.path.exists(CONFIG_FILE): return
-        with open(CONFIG_FILE, "r") as f: lines = f.readlines()
-        section_header = f"[main.plugins.{plugin_name}]"
-        new_lines = []
-        inside_section = False
-        for line in lines:
-            stripped = line.strip()
-            if stripped == section_header:
-                inside_section = True
-                continue
-            if stripped.startswith("[") and inside_section:
-                inside_section = False
-            if not inside_section:
-                new_lines.append(line)
+        with open(CONFIG_FILE, "r", errors='ignore') as f: lines = f.readlines()
+
+        new_lines = _strip_plugin_config(lines, plugin_name)
+
         if enable:
             if new_lines and not new_lines[-1].endswith('\n'): new_lines[-1] += '\n'
-            new_lines.append(f"\n{section_header}\nenabled = true\n")
-        with open(CONFIG_FILE, "w") as f: f.writelines(new_lines)
+            new_lines.append(f"\n[main.plugins.{plugin_name}]\nenabled = true\n")
+
+        tmp_path = CONFIG_FILE + ".pwnstore.tmp"
+        with open(tmp_path, "w") as f:
+            f.writelines(new_lines)
+            f.flush()
+            os.fsync(f.fileno())
+        shutil.copymode(CONFIG_FILE, tmp_path)
+        os.replace(tmp_path, CONFIG_FILE)
     except Exception as e:
         print(f"{RED}[!] Config update failed for {plugin_name}: {e}{RESET}")
 
 def remove_plugin_config(plugin_name):
-    """Remove the plugin's entire TOML section from config."""
+    """Remove the plugin's config from config.toml (both dotted and section form)."""
     update_config(plugin_name, enable=False)
 
 def show_detailed_help():
@@ -526,3 +589,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

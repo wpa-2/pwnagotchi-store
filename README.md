@@ -2,7 +2,7 @@
 
 **Stop downloading massive ZIP files.** Install Pwnagotchi plugins surgically—one file at a time.
 
-[![CLI Version](https://img.shields.io/badge/CLI-v3.3.3-green)](https://github.com/wpa-2/pwnagotchi-store) [![UI Version](https://img.shields.io/badge/Web_UI-v1.2.10-blue)](https://github.com/wpa-2/pwnagotchi-store) [![Gallery](https://img.shields.io/badge/Gallery-Live-orange)](https://pwnstore.org/) [![License](https://img.shields.io/badge/license-GPL3-red)](LICENSE)
+[![CLI Version](https://img.shields.io/badge/CLI-v3.3.4-green)](https://github.com/wpa-2/pwnagotchi-store) [![UI Version](https://img.shields.io/badge/Web_UI-v1.2.10-blue)](https://github.com/wpa-2/pwnagotchi-store) [![Gallery](https://img.shields.io/badge/Gallery-Live-orange)](https://pwnstore.org/) [![License](https://img.shields.io/badge/license-GPL3-red)](LICENSE)
 
 ---
 
@@ -21,7 +21,7 @@ sudo pwnstore install <plugin_name>
 
 ---
 
-## 📦 Four Ways to Use PwnStore
+## 📦 Four Ways to Use  PwnStore
 
 | Interface | Perfect For | Access |
 |-----------|-------------|--------|
@@ -47,8 +47,8 @@ sudo pwnstore install <plugin_name>
 
 ## ✨ Features
 
-- **📦 Lightweight:** No massive ZIP files—download only what you need
-- **🎯 Surgical Installs:** Single `.py` files or auto-extracted from archives
+- **📦 Lightweight:** No massive ZIP files - download only what you need
+- **🎯 Surgical Installs:** Single `.py` files are auto-extracted from archives
 - **🧠 Smart Config:** Automatically adds `enabled = true` to config.toml
 - **🔄 Auto-Update:** Keep plugins and PwnStore itself up to date
 - **📱 Mobile-Friendly:** Touch-optimized web interface
