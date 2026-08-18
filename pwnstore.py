@@ -283,9 +283,45 @@ def upgrade_tool(args):
     except Exception as e:
         print(f"{RED}[!] Update failed: {e}{RESET}")
 
+def _get_bundled_plugin_path(name):
+    """Check whether `name` is already shipped as a pwnagotchi core default
+    plugin on this specific device. Mirrors pwnagotchi's own
+    plugins/__init__.py default_path logic (relative to wherever the
+    pwnagotchi package is actually installed) rather than a hardcoded path,
+    so this stays correct across image versions and install methods.
+    Older images that predate a plugin being bundled simply won't find it
+    here, and install proceeds normally."""
+    try:
+        import importlib.util
+        spec = importlib.util.find_spec("pwnagotchi.plugins")
+        if spec and spec.origin:
+            default_dir = os.path.join(os.path.dirname(spec.origin), "default")
+            candidate = os.path.join(default_dir, f"{name}.py")
+            if os.path.exists(candidate):
+                return candidate
+    except Exception:
+        pass
+    return None
+
 def _install_plugin_by_name(name, registry=None):
     """Core install logic used by both install_plugin() and update_plugins()."""
     if not _require_safe_name(name): return False
+
+    bundled_path = _get_bundled_plugin_path(name)
+    if bundled_path:
+        print(f"{YELLOW}[!] '{name}' is already built into pwnagotchi core on this device.{RESET}")
+        print(f"{YELLOW}    Found at: {bundled_path}{RESET}")
+        print(f"{YELLOW}    pwnagotchi loads default plugins then custom plugins with no{RESET}")
+        print(f"{YELLOW}    collision check, so a second copy here would run alongside it —{RESET}")
+        print(f"{YELLOW}    both instances active at once, which can break either or both.{RESET}")
+        try:
+            confirm = input(f"{YELLOW}    Install a custom copy anyway? [y/N]: {RESET}").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            confirm = 'n'
+        if confirm != 'y':
+            print(f"{CYAN}[*] Skipped — already available as a core plugin.{RESET}")
+            print(f"{CYAN}    Just enable it in config.toml: [main.plugins.{name}]{RESET}")
+            return False
 
     if registry is None:
         registry = fetch_registry()
@@ -589,4 +625,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

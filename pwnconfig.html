@@ -311,7 +311,7 @@ function buildToml(cfg) {
     L.push("]");
   } else { L.push("whitelist = []"); }
   L.push('confd = "/etc/pwnagotchi/conf.d/"');
-  L.push('custom_plugins = "/usr/local/share/pwnagotchi/custom-plugins/"');
+  L.push('custom_plugins = "/etc/pwnagotchi/custom-plugins/"');
   L.push("custom_plugin_repos = [");
   L.push('    "https://github.com/jayofelony/pwnagotchi-torch-plugins/archive/master.zip",');
   L.push('    "https://github.com/Sniffleupagus/pwnagotchi_plugins/archive/master.zip",');
