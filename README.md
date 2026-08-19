@@ -2,7 +2,7 @@
 
 **Stop downloading massive ZIP files.** Install Pwnagotchi plugins surgically—one file at a time.
 
-[![CLI Version](https://img.shields.io/badge/CLI-v3.3.4-green)](https://github.com/wpa-2/pwnagotchi-store) [![UI Version](https://img.shields.io/badge/Web_UI-v1.2.10-blue)](https://github.com/wpa-2/pwnagotchi-store) [![Gallery](https://img.shields.io/badge/Gallery-Live-orange)](https://pwnstore.org/) [![License](https://img.shields.io/badge/license-GPL3-red)](LICENSE)
+[![CLI Version](https://img.shields.io/badge/CLI-v3.3.4-green)](https://github.com/wpa-2/pwnagotchi-store) [![UI Version](https://img.shields.io/badge/Web_UI-v1.2.11-blue)](https://github.com/wpa-2/pwnagotchi-store) [![Gallery](https://img.shields.io/badge/Gallery-Live-orange)](https://pwnstore.org/) [![License](https://img.shields.io/badge/license-GPL3-red)](LICENSE)
 
 ---
 
