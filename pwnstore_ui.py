@@ -27,7 +27,7 @@ def is_safe_name(name):
 
 class PwnStoreUI(plugins.Plugin):
     __author__ = 'WPA2'
-    __version__ = '1.2.10'
+    __version__ = '1.2.11'
     __license__ = 'GPL3'
     __description__ = 'Plugin store with web interface for browsing and installing plugins'
 
@@ -492,16 +492,28 @@ class PwnStoreUI(plugins.Plugin):
                 # Boolean
                 if v_str.lower() in ('true', 'false'):
                     new_lines.append(f"{k} = {v_str.lower()}\n")
-                # Integer
-                elif v_str.lstrip('-').isdigit():
+                # Integer (TOML forbids leading zeros, e.g. "007")
+                elif v_str.lstrip('-').isdigit() and (v_str.lstrip('-') == '0' or not v_str.lstrip('-').startswith('0')):
                     new_lines.append(f"{k} = {v_str}\n")
-                # Float (e.g. 1.5, 0.75)
-                elif re.match(r'^-?\d+\.\d+$', v_str):
+                # Float (e.g. 1.5, 0.75) — same no-leading-zero rule on the integer part
+                elif re.match(r'^-?(0|[1-9]\d*)\.\d+$', v_str):
                     new_lines.append(f"{k} = {v_str}\n")
                 # Array — validate it only contains safe TOML primitives, reject newlines
                 elif v_str.startswith('[') and v_str.endswith(']'):
-                    if '\n' in v_str or '\r' in v_str or '[' in v_str[1:].rstrip(']'):
-                        # Reject arrays containing newlines or nested brackets (TOML injection)
+                    depth = 0
+                    balanced = True
+                    for ch in v_str:
+                        if ch == '[':
+                            depth += 1
+                        elif ch == ']':
+                            depth -= 1
+                            if depth < 0:
+                                balanced = False
+                                break
+                    if ('\n' in v_str or '\r' in v_str or depth != 0 or not balanced
+                            or v_str.count('[') > 1):
+                        # Reject arrays containing newlines, nested/multiple brackets,
+                        # or unbalanced brackets (TOML injection/corruption)
                         continue
                     new_lines.append(f"{k} = {v_str}\n")
                 else:
