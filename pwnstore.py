@@ -14,7 +14,7 @@ import io
 import shutil
 import re
 
-__version__ = "3.3.4"
+__version__ = "3.3.5"
 
 # --- CONFIGURATION ---
 DEFAULT_REGISTRY = "https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/plugins.json"
@@ -57,24 +57,55 @@ def _require_safe_name(name):
         return False
     return True
 
+def _parse_version(v):
+    """Split a version string into (release_numbers, prerelease_tag).
+
+    "1.2.3"      -> ([1, 2, 3], "")
+    "1.2.3-beta" -> ([1, 2, 3], "beta")
+    "2.0.0rc1"   -> ([2, 0, 0], "rc1")
+
+    Returns None if there's no leading numeric component to compare on at all
+    (e.g. "unknown"), so callers can refuse to act rather than guess.
+    """
+    if not isinstance(v, str):
+        return None
+    v = v.strip().lstrip('vV')
+    # Split the numeric release part from any pre-release/build suffix.
+    m = re.match(r'^(\d+(?:\.\d+)*)[.\-_+]?([A-Za-z0-9.\-_+]*)$', v)
+    if not m:
+        return None
+    numbers = [int(x) for x in m.group(1).split('.')]
+    return numbers, m.group(2) or ""
+
+
 def compare_versions(v1, v2):
-    """Compare semantic versions properly. Returns 1 if v1>v2, -1 if v1<v2, 0 if equal."""
-    try:
-        v1_parts = [int(x) for x in v1.lstrip('v').split('.')]
-        v2_parts = [int(x) for x in v2.lstrip('v').split('.')]
-        while len(v1_parts) < len(v2_parts): v1_parts.append(0)
-        while len(v2_parts) < len(v1_parts): v2_parts.append(0)
-        for a, b in zip(v1_parts, v2_parts):
-            if a > b: return 1
-            elif a < b: return -1
-        return 0
-    except (ValueError, AttributeError):
-        # Fallback: pad with zeros so "9" < "10" works numerically where possible
-        # Last resort: string compare (still better than crashing)
-        try:
-            return (v1 > v2) - (v1 < v2)
-        except Exception:
-            return 0
+    """Compare semantic versions. Returns 1 if v1>v2, -1 if v1<v2, 0 if equal.
+
+    A pre-release ("1.2.0-beta") sorts BELOW the matching release ("1.2.0"),
+    per semver. The old implementation fell back to a lexicographic string
+    compare here, which ranked betas as newer than their own stable release
+    and treated any unparseable string as newer than everything.
+
+    Returns None when either side can't be parsed, so callers can distinguish
+    "older/newer/same" from "no idea" instead of silently getting a wrong answer.
+    """
+    p1, p2 = _parse_version(v1), _parse_version(v2)
+    if p1 is None or p2 is None:
+        return None
+
+    n1, tag1 = p1
+    n2, tag2 = p2
+    while len(n1) < len(n2): n1.append(0)
+    while len(n2) < len(n1): n2.append(0)
+    for a, b in zip(n1, n2):
+        if a > b: return 1
+        if a < b: return -1
+
+    # Same release numbers: no tag beats any tag (1.2.0 > 1.2.0-beta).
+    if not tag1 and not tag2: return 0
+    if not tag1: return 1
+    if not tag2: return -1
+    return (tag1 > tag2) - (tag1 < tag2)
 
 def get_local_version(file_path):
     """Reads the __version__ string from a local file."""
@@ -90,7 +121,7 @@ def get_local_version(file_path):
 def get_installed_plugins():
     plugin_dir = get_custom_plugin_dir()
     if not os.path.exists(plugin_dir): return []
-    return [f.replace(".py", "") for f in os.listdir(plugin_dir) if f.endswith(".py")]
+    return [f[:-3] for f in os.listdir(plugin_dir) if f.endswith(".py")]
 
 def get_registry_url():
     """Checks config.toml for a developer override"""
@@ -157,7 +188,7 @@ def _format_status(plugin_name, remote_version, installed_list):
         return "Available"
     local_ver = get_local_version(os.path.join(get_custom_plugin_dir(), f"{plugin_name}.py"))
     cmp = compare_versions(remote_version, local_ver)
-    if cmp > 0:
+    if cmp is not None and cmp > 0:
         return f"{YELLOW}UPDATE AVAILABLE{RESET}"
     return f"{GREEN}INSTALLED{RESET}"
 
@@ -168,7 +199,7 @@ def list_plugins(args):
     print(f"{'NAME':<25} | {'VERSION':<10} | {'AUTHOR':<20} | {'STATUS'}")
     print("-" * 80)
     for p in registry:
-        original_name = p['name']
+        original_name = p.get('name', '')
         display_name = original_name
         if len(display_name) > 24: display_name = display_name[:21] + "..."
         status = _format_status(original_name, p['version'], installed)
@@ -201,12 +232,13 @@ def search_plugins(args):
     registry = fetch_registry()
     installed = get_installed_plugins()
     query = args.query.lower()
-    results = [p for p in registry if query in p['name'].lower() or query in p.get('description', '').lower()]
+    results = [p for p in registry
+               if query in p.get('name', '').lower() or query in p.get('description', '').lower()]
     if not results: return print(f"{YELLOW}[!] No results for '{args.query}'{RESET}")
     print(f"{'NAME':<25} | {'VERSION':<10} | {'AUTHOR':<20} | {'STATUS'}")
     print("-" * 80)
     for p in results:
-        original_name = p['name']
+        original_name = p.get('name', '')
         display_name = original_name
         if len(display_name) > 24: display_name = display_name[:21] + "..."
         status = _format_status(original_name, p['version'], installed)
@@ -218,7 +250,7 @@ def search_plugins(args):
 def show_info(args):
     if not _require_safe_name(args.name): return
     registry = fetch_registry()
-    plugin_data = next((p for p in registry if p['name'] == args.name), None)
+    plugin_data = next((p for p in registry if p.get('name') == args.name), None)
     if not plugin_data: return print(f"{RED}[!] Not found.{RESET}")
     print(f"\n{CYAN}--- {plugin_data['name']} ---{RESET}")
     print(f"Author:      {plugin_data['author']}")
@@ -230,7 +262,9 @@ def show_info(args):
     if plugin_data['name'] in installed:
         local_ver = get_local_version(os.path.join(get_custom_plugin_dir(), f"{plugin_data['name']}.py"))
         cmp = compare_versions(plugin_data['version'], local_ver)
-        if cmp > 0:
+        if cmp is None:
+            print(f"Installed:   {YELLOW}v{local_ver} (cannot compare with registry v{plugin_data['version']}){RESET}")
+        elif cmp > 0:
             print(f"Installed:   {YELLOW}v{local_ver} (update available -> v{plugin_data['version']}){RESET}")
         elif cmp < 0:
             print(f"Installed:   {GREEN}v{local_ver} (ahead of registry){RESET}")
@@ -264,10 +298,19 @@ def upgrade_tool(args):
 
         # Extract version from __version__ = "x.y.z" (the canonical source)
         remote_ver_match = re.search(r'__version__\s*=\s*["\'](.+?)["\']', r.text)
-        remote_ver = remote_ver_match.group(1) if remote_ver_match else "unknown"
+        remote_ver = remote_ver_match.group(1) if remote_ver_match else None
         local_ver = __version__
 
-        cmp = compare_versions(remote_ver, local_ver)
+        # Refuse to act on a version we can't read. A truncated or mangled
+        # response can still contain the shebang checked above, and overwriting
+        # this script in place on the strength of an unreadable version string
+        # is how you end up with a bricked CLI and no way to recover it.
+        cmp = compare_versions(remote_ver, local_ver) if remote_ver else None
+        if cmp is None:
+            print(f"{RED}[!] Could not read a valid version from the remote script — refusing to update.{RESET}")
+            print(f"{CYAN}Download manually if needed: https://github.com/wpa-2/pwnagotchi-store{RESET}")
+            return
+
         if cmp == 0:
             print(f"{GREEN}[+] PwnStore is already up to date (v{local_ver}).{RESET}")
             return
@@ -275,9 +318,18 @@ def upgrade_tool(args):
             print(f"{GREEN}[+] Local version (v{local_ver}) is ahead of remote (v{remote_ver}). No update needed.{RESET}")
             return
 
+        # Write via a temp file in the same directory, then atomically replace.
+        # Truncating the running script in place means an interrupted write
+        # (disk full, power cut, dropped connection mid-body) leaves a
+        # half-written pwnstore with no way to run it and fix itself.
         current_file = os.path.realpath(__file__)
-        with open(current_file, 'w') as f: f.write(r.text)
-        os.chmod(current_file, 0o755)
+        tmp_path = current_file + ".pwnstore.tmp"
+        with open(tmp_path, 'w') as f:
+            f.write(r.text)
+            f.flush()
+            os.fsync(f.fileno())
+        os.chmod(tmp_path, 0o755)
+        os.replace(tmp_path, current_file)
         print(f"{GREEN}[+] PwnStore updated v{local_ver} -> v{remote_ver}{RESET}")
         print(f"{CYAN}Restart your session to use the new version.{RESET}")
     except Exception as e:
@@ -326,7 +378,7 @@ def _install_plugin_by_name(name, registry=None):
     if registry is None:
         registry = fetch_registry()
 
-    plugin_data = next((p for p in registry if p['name'] == name), None)
+    plugin_data = next((p for p in registry if p.get('name') == name), None)
     if not plugin_data:
         print(f"{RED}[!] Not found.{RESET}")
         return False
@@ -403,12 +455,13 @@ def update_plugins(args):
     installed_files = [f for f in os.listdir(plugin_dir) if f.endswith(".py")]
     updates_found = []
     for filename in installed_files:
-        plugin_name = filename.replace(".py", "")
-        remote_data = next((p for p in registry if p['name'] == plugin_name), None)
+        plugin_name = filename[:-3]
+        remote_data = next((p for p in registry if p.get('name') == plugin_name), None)
         if remote_data:
             local_ver = get_local_version(os.path.join(plugin_dir, filename))
-            remote_ver = remote_data['version']
-            if compare_versions(remote_ver, local_ver) > 0:
+            remote_ver = remote_data.get('version', '')
+            cmp = compare_versions(remote_ver, local_ver)
+            if cmp is not None and cmp > 0:
                 updates_found.append({"name": plugin_name, "local": local_ver, "remote": remote_ver, "data": remote_data})
 
     if not updates_found:
