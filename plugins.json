@@ -461,7 +461,7 @@
   },
   {
     "name": "pwn-companion",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "description": "Device-side bridge to the PwnCompanion app: screen mirror, GPS, telemetry, captures, commands, and AI voice.",
     "author": "wsvdmeer",
     "category": "Attack",
@@ -611,7 +611,7 @@
   },
   {
     "name": "theylive",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "description": "Advanced GPS plugin for Pwnagotchi: rich on-screen GPS data, per-handshake and continuous track logging, GPX/GeoJSON export, gpsd and PwnDroid backends with automatic reconnection,",
     "author": "discord@rai68 (original) - enhanced by AlienMajik",
     "category": "Display",
