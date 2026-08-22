@@ -21,7 +21,7 @@
   },
   {
     "name": "auto_backup",
-    "version": "2.3",
+    "version": "2.4",
     "description": "Backs up Pwnagotchi configuration and data, keeping recent backups.",
     "author": "WPA2",
     "category": "System",
@@ -141,7 +141,7 @@
   },
   {
     "name": "discord",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "description": "Enhanced Discord integration: sends handshakes with location data and session reports",
     "author": "WPA2",
     "category": "Social",
@@ -251,7 +251,7 @@
   },
   {
     "name": "git_backup",
-    "version": "2.1.1",
+    "version": "2.2",
     "description": "Simple Git backup for Pwnagotchi - mirrors files to GitHub with auto-restore script",
     "author": "WPA2",
     "category": "System",
@@ -531,9 +531,9 @@
   },
   {
     "name": "skyhigh",
-    "version": "2.0.0",
-    "description": "Advanced aircraft/ADS\u2011B plugin with robust type detection, filtering, export, and caching.",
-    "author": "AlienMajik (enhanced by community)",
+    "version": "2.2.0",
+    "description": "Tracks nearby aircraft via the OpenSky Network: on-screen count, live map, flight-strip board, filters and exports.",
+    "author": "AlienMajik",
     "category": "Display",
     "origin_type": "zip",
     "download_url": "https://github.com/AlienMajik/pwnagotchi_plugins/archive/refs/heads/main.zip",
@@ -591,7 +591,7 @@
   },
   {
     "name": "tailscale",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "A configurable plugin to connect to a Tailscale network and sync handshakes.",
     "author": "WPA2",
     "category": "Display",
@@ -601,7 +601,7 @@
   },
   {
     "name": "telepwn",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Telegram interface for Pwnagotchi - Python 3.13 compatible",
     "author": "WPA2",
     "category": "Attack",
@@ -681,7 +681,7 @@
   },
   {
     "name": "web2ssh",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A Plugin to issue SSH commands via a browser",
     "author": "WPA2",
     "category": "System",
@@ -711,7 +711,7 @@
   },
   {
     "name": "wireguard",
-    "version": "2.2",
+    "version": "2.3",
     "description": "VPN Sync: Full backup on first run, then incremental only. (Enhanced Edition - Fixed)",
     "author": "WPA2",
     "category": "Display",
