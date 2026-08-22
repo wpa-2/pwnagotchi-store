@@ -20,7 +20,7 @@ __version__ = "3.3.5"
 DEFAULT_REGISTRY = "https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/plugins.json"
 
 # Fallback if config.toml has no custom_plugins entry
-DEFAULT_CUSTOM_PLUGIN_DIR = "/usr/local/share/pwnagotchi/custom-plugins/"
+DEFAULT_CUSTOM_PLUGIN_DIR = "/etc/pwnagotchi/custom-plugins/"
 CONFIG_FILE = "/etc/pwnagotchi/config.toml"
 
 # ANSI Colors
