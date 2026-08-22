@@ -21,7 +21,7 @@
   },
   {
     "name": "auto_backup",
-    "version": "2.2",
+    "version": "2.3",
     "description": "Backs up Pwnagotchi configuration and data, keeping recent backups.",
     "author": "WPA2",
     "category": "System",
@@ -331,7 +331,7 @@
   },
   {
     "name": "mad_hatter",
-    "version": "2.0.1",
+    "version": "2.3.0",
     "description": "Universal UPS plugin: MAX170xx / INA219 / PiSugar, with real current sensing, IR-compensated SOC, background polling and safe shutdown.",
     "author": "AlienMajik (with community enhancements)",
     "category": "Hardware",
@@ -441,8 +441,8 @@
   },
   {
     "name": "probenpwn",
-    "version": "3.3.0",
-    "description": "Ultimate handshake/PMKID capture \u2013 with quiet association attacks and WPS PIN saving.",
+    "version": "3.4.0",
+    "description": "Ultimate handshake/PMKID capture \u2013 quiet association attacks, WPS PIN saving, fixed RSN/rate-limiter/retry (v3.4.0).",
     "author": "AlienMajik",
     "category": "Attack",
     "origin_type": "zip",
@@ -541,7 +541,7 @@
   },
   {
     "name": "snoopr",
-    "version": "7.0.1",
+    "version": "7.1.0",
     "description": "SnoopR: Wi-Fi/BLE/ADS-B surveillance detection with geofencing, aircraft anomaly detection, trilateration, mesh sharing and a live web UI.",
     "author": "AlienMajik",
     "category": "Display",
