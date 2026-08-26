@@ -441,8 +441,8 @@
   },
   {
     "name": "probenpwn",
-    "version": "3.4.0",
-    "description": "Ultimate handshake/PMKID capture \u2013 quiet association attacks, WPS PIN saving, fixed RSN/rate-limiter/retry (v3.4.0).",
+    "version": "3.4.1",
+    "description": "Ultimate handshake/PMKID capture \u2013 quiet association attacks, WPS PIN saving, fixed RSN/rate-limiter/retry + improved tool detection (v3.4.1).",
     "author": "AlienMajik",
     "category": "Attack",
     "origin_type": "zip",
