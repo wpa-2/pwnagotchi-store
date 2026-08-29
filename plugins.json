@@ -561,7 +561,7 @@
   },
   {
     "name": "sorted_pwn",
-    "version": "0.0.2.2",
+    "version": "0.0.3",
     "description": "List cracked passwords from any potfile found in the handshakes directory",
     "author": "37124354+dbukovac@users.noreply.github.com",
     "category": "Attack",
