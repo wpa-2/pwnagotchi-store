@@ -681,7 +681,7 @@
   },
   {
     "name": "web2ssh",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "A Plugin to issue SSH commands via a browser",
     "author": "WPA2",
     "category": "System",
