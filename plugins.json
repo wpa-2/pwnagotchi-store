@@ -461,7 +461,7 @@
   },
   {
     "name": "pwn-companion",
-    "version": "2.2.0",
+    "version": "2.5.0",
     "description": "Device-side bridge to the PwnCompanion app: screen mirror, GPS, telemetry, captures, commands, and AI voice.",
     "author": "wsvdmeer",
     "category": "Attack",
