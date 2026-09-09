@@ -451,8 +451,8 @@
   },
   {
     "name": "probeReq",
-    "version": "0.0.0.4",
-    "description": "Listens for Wi-Fi probe requests, displays them on screen and logs them.",
+    "version": "0.0.5",
+    "description": "BETA Listens for Wi-Fi probe requests, displays them on screen and logs them.",
     "author": "avipars",
     "category": "Display",
     "origin_type": "zip",
@@ -561,7 +561,7 @@
   },
   {
     "name": "sorted_pwn",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "List cracked passwords from any potfile found in the handshakes directory",
     "author": "37124354+dbukovac@users.noreply.github.com",
     "category": "Attack",
