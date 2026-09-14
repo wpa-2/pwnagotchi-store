@@ -81,7 +81,7 @@
   },
   {
     "name": "bt-tether",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "description": "Guided Bluetooth tethering with user instructions",
     "author": "wsvdmeer",
     "category": "Display",
@@ -668,6 +668,16 @@
     "origin_type": "zip",
     "download_url": "https://github.com/cyberartemio/wardriver-pwnagotchi-plugin/archive/main.zip",
     "path_inside_zip": "wardriver-pwnagotchi-plugin-main/wardriver.py"
+  },
+  {
+    "name": "waveshare-ups",
+    "version": "1.1.0",
+    "description": "Battery gauge for the Waveshare UPS HAT (C): segmented battery icon, charging detection, self-healing I2C init.",
+    "author": "wsvdmeer",
+    "category": "Hardware",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wsvdmeer/pwnagotchi-plugins/archive/main.zip",
+    "path_inside_zip": "pwnagotchi-plugins-main/waveshare-ups/waveshare-ups.py"
   },
   {
     "name": "weather2pwn",
