@@ -520,6 +520,16 @@
     "path_inside_zip": "pwnagotchi-plugins-main/rtc-datetime/rtc-datetime.py"
   },
   {
+    "name": "rtc-sync",
+    "version": "1.0.0",
+    "description": "Keeps the system clock in sync with a DS3231/DS1307 RTC: restore time at boot (trusting whichever clock is ahead), persist fresh time back to the RTC (no kernel overlay needed), and turn off the DS3231's unused 32kHz output.",
+    "author": "wsvdmeer",
+    "category": "Display",
+    "origin_type": "zip",
+    "download_url": "https://github.com/wsvdmeer/pwnagotchi-plugins/archive/main.zip",
+    "path_inside_zip": "pwnagotchi-plugins-main/rtc-sync/rtc-sync.py"
+  },
+  {
     "name": "service_uptime",
     "version": "1.0.8",
     "description": "Logs and displays Pwnagotchi service uptime",
@@ -671,8 +681,8 @@
   },
   {
     "name": "waveshare-ups",
-    "version": "1.1.0",
-    "description": "Battery gauge for the Waveshare UPS HAT (C): segmented battery icon, charging detection, self-healing I2C init.",
+    "version": "1.0.0",
+    "description": "Battery gauge for the Waveshare UPS HAT (C): segmented battery icon, charging detection, self-healing I2C init, self-driven refresh, and a web history chart.",
     "author": "wsvdmeer",
     "category": "Hardware",
     "origin_type": "zip",
