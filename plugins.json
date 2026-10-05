@@ -641,7 +641,7 @@
   },
   {
     "name": "uncracked",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Download handshake not found in wpa-sec from web-ui.",
     "author": "NeonLightning",
     "category": "Attack",
