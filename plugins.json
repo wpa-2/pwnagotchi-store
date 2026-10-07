@@ -281,7 +281,7 @@
   },
   {
     "name": "handshakes-dl",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "Download handshake captures from web-ui.",
     "author": "me@sayakb.com",
     "category": "Attack",
