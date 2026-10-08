@@ -11,3 +11,4 @@ https://raw.githubusercontent.com/wpa-2/pwnagotchi-store/main/pwnstore_ui.py
 https://github.com/CoderFX/pwnagotchi-plugins/archive/main.zip
 https://raw.githubusercontent.com/adondada/pwnagotchi-display-manager/refs/heads/main/display_manager.py
 https://github.com/wsvdmeer/pwn-companion/archive/main.zip
+https://raw.githubusercontent.com/vojtabiberle/pwnagotchi-wifi-manager/main/wifi-manager.py
